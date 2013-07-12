@@ -923,4 +923,45 @@ if ($debug) {
     printf("//num_arguments=%d or %d\n", $num_arguments, count($arguments));
 }
 
+$store = array ();
+$store["agents"] = & $agents; $store["num_agents"] = $num_agents;
+$store["my_beliefs"] = & $my_beliefs;
+$store["num_my_beliefs"] = $num_my_beliefs;
+$store["my_facts"] = & $my_facts; $store["num_my_facts"] = $num_my_facts;
+$store["my_rules"] = & $my_rules; $store["num_my_rules"] = $num_my_rules;
+$store["my_facts_not_end_argument"] = & $my_facts_not_end_argument;
+$store["num_my_facts_not_end_argument"] = $num_my_facts_not_end_argument;
+$store["my_facts_end_argument"] = & $my_facts_end_argument;
+$store["num_my_facts_end_argument"] = $num_my_facts_end_argument;
+$store["my_rules_not_end_argument"] = & $my_rules_not_end_argument;
+$store["num_my_rules_not_end_argument"] = $num_my_rules_not_end_argument;
+$store["my_rules_end_argument"] = & $my_rules_end_argument;
+$store["num_my_rules_end_argument"] = $num_my_rules_end_argument;
+$store["belief_arrows"] = & $belief_arrows;
+$store["num_belief_arrows"] = $num_belief_arrows;
+$store["belief_arrows_from"] = & $belief_arrows_from;
+$store["num_belief_arrows_from"] = & $num_belief_arrows_from;
+$store["belief_arrows_to"] = & $belief_arrows_to;
+$store["num_belief_arrows_to"] = $num_belief_arrows_to;
+$store["attack_arrows"] = & $attack_arrows;
+$store["num_attack_arrows"] = $num_attack_arrows;
+$store["agent_arrows"] = & $agent_arrows;
+$store["num_agent_arrows"] = $num_agent_arrows;
+$store["agent_belief_arrows"] = & $agent_belief_arrows;
+$store["num_agent_belief_arrows"] = $num_agent_belief_arrows;
+$store["arguments"] = & $arguments; $store["num_arguments"] = $num_arguments;
+
+/*
+if ($debug) {
+    printf("//arguments keys: %s\n",
+          implode(", ", array_keys($store["arguments"])));
+}
+*/
+
+$fp = file_put_contents("graphs2/".$sessionID.".vars",  serialize($store));
+if ($fp == FALSE) {
+    printf("//ERROR: on writing variables to file\n");
+    // TODO: exit
+}
+
 ?>
