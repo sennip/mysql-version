@@ -1,7 +1,8 @@
 <?php
-$link = mysqli_connect('jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com','trust_user','trust123', 'trust');
+#$link = mysqli_connect('jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com','trust_user','trust123', 'trust');
+$link = mysqli_connect('127.0.0.1','root','', 'trust');
 if (!$link) {
-die('Could not connect: ' . mysql_error());
+	die('Could not connect: ' . mysql_error());
 }
 
 //$command = "sh runTrust.sh ". $_GET['xmlfile']." ". $_GET['outputfile'];
@@ -40,19 +41,24 @@ if(array_key_exists('sessionID', $_GET)){
 		include 'dotgen_hw.php';
 		$contents = ob_get_contents();
 		ob_end_clean();
-	}	
+	}
 	$fp = file_put_contents("graphs2/".$sessionID.".dot",$contents);
-	$output = exec("dot graphs2/".$sessionID.".dot -Txdot -ographs2/".$sessionID.".gv");	
+	$output = exec("dot graphs2/".$sessionID.".dot -Txdot -o graphs2/".$sessionID.".gv");	
 }else if(array_key_exists('xmlfile', $_GET)){
 	$graphType = 'default';
 	$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile']);
 	$timestep=1;
 	ob_start();
+	include 'datagen_db.php';
+	$contents = ob_get_contents();
+	ob_end_clean();
+	$fp = file_put_contents("graphs2/".$sessionID.".debug",$contents);
+	ob_start();
 	include 'dotgen_hw.php';
 	$contents = ob_get_contents();
 	ob_end_clean();
 	$fp = file_put_contents("graphs2/".$sessionID.".dot",$contents);
-	$output = exec("dot graphs2/".$sessionID.".dot -Txdot -ographs2/".$sessionID.".gv");
+	$output = exec("dot graphs2/".$sessionID.".dot -Txdot -o graphs2/".$sessionID.".gv");
 }else{
 //	echo "Upload a file on the right side";
 	$sessionID = "";
