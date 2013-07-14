@@ -15,8 +15,8 @@ digraph g {
 */
 foreach ($agents as $agent_id => $agent_info) {
     printf("%s [label=%s, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-             $agent_info["dot_label"], $agent_info["name"]);
-  }
+           $agent_info["dot_label"], $agent_info["name"]);
+}
 
 /*
 * Create fact nodes for agentID=1 (usually 'Me') that aren't ends of arguments
@@ -68,7 +68,7 @@ foreach ($my_rules_not_end_argument as $id=>$info) {
 * Create rule nodes for agentID=1 (usually 'Me') that are argument conclusions
 */
 foreach ($my_rules_end_argument as $id=>$info) {
-      printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=lightblue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+    printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=lightblue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
              $info["rule_dot_label"], $info["rule_display"], $info["level"]);
     printf("%s -> %s [color=darkgreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["rule_dot_label"], $info["inference_dot_label"]);
@@ -92,7 +92,7 @@ foreach ($my_rules_end_argument as $id=>$info) {
                $info["inference_dot_label"], $info["inference_display"],
                $info["level"], $statuses);
                 
-      }
+    }
 }
 
 /*
