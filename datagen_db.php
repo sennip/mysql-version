@@ -1,14 +1,301 @@
 <?php
+/** @file datagen_db.php
+ * @brief File that extracts data structures from the trust database.
+ *
+ * Contains declarations of all the data structures that can be used by the
+ * dotgen files.
+ */
+
+/** @brief int \$debug: Output debug information (=1) or not (=0) into file
+*          $sessionID.debug
+*/
 $debug = 1;
 
-/*
-* Create agents data structure
-*/
-// VARS:
-// $agents[id_val] = array(name=>string, dot_label=>string)
-// $num_agents = int
+/** @brief array $agents: array (with key=id_val) of scenario agent info.
+ * 
+ * $agents[id_val] = array("name"=>agent name string,
+ *                         "dot_label"=>label string used in dot file)
+ */
 $agents = array ();
+/** @brief int \$num_agents: number of entries in $agents.
+ *
+ * Number of agents contained in scenario.
+ */
 $num_agents = 0;
+
+/** @brief array $my_beliefs: array (with key=id_val) of information contained
+ *         in $my_facts and $my_rules.
+ *
+ * $my_beliefs[id_val] = reference to an entry either in $my_facts or $my_rules.
+ */
+$my_beliefs = array ();
+/** @brief int \$num_my_beliefs: number of entries in $my_beliefs.
+ *
+ * Number of beliefs reachable by "Me" either directly or indirectly through
+ * other agents.
+ */
+$num_my_beliefs = 0;
+
+/** @brief array $my_facts: store array (with key=id_val) of information
+ *         contained in $my_facts_not_end_argument and $my_facts_end_argument.
+ *
+ * $my_facts[id_val] = reference to an entry either in
+ *                     $my_facts_not_end_argument or $my_facts_end_argument.
+ */
+$my_facts = array ();
+/** @brief int \$num_my_facts: number of entries in $my_facts.
+ *
+ * Number of facts reachable by "Me" either directly or indirectly through
+ * other agents.
+ */
+$num_my_facts = 0;
+
+/** @brief array $my_rules: array (with key=id_val) of information contained
+ *         in $my_rules_not_end_argument and $my_rules_end_argument.
+ *
+ * $my_rules[id_val] = reference to an entry either in
+ *                     $my_rules_not_end_argument or $my_rules_end_argument.
+ */
+$my_rules = array ();
+/** @brief int \$num_my_rules: number of entries in $my_rules.
+ *
+ * Number of rules reachable by "Me" either directly or indirectly through
+ * other agents.
+ */
+$num_my_rules = 0;
+
+/** @brief array $my_facts_not_end_argument: array (with key=id_val) of facts
+ *         reachable by "Me" that are not ends of arguments.
+ *
+ * $my_facts_not_end_argument[id_val] = array("predicate"=>string,
+ *    "constant"=>string, "is_negated"=>string, "logic_display"=>string,
+ *    "num_paths"=>int, "levels"=>array(of size num_paths), "is_rule"=>0,
+ *    "end_argument"=>0, "dot_label"=>string)
+ *
+ * NOTE: a fact can be reached by "Me" from many different paths through
+ * different agents. Hence key "num_paths".
+ *
+ * TODO (potential bug): There could be a case when the direct or indirect
+ * belief levels from "Me" are the same but the fact is reached from 2 or more
+ * paths and this will not be caught.
+ */
+$my_facts_not_end_argument = array ();
+/** @brief int \$num_my_facts_not_end_argument: number of entries in
+ *         $my_facts_not_end_argument.
+ *
+ * Number of facts reachable by "Me" either directly or indirectly through
+ * other agents that are not end of arguments.
+ */
+$num_my_facts_not_end_argument = 0;
+
+/** @brief array $my_facts_end_argument: array (with key=id_val) of facts
+ *         reachable by "Me" that are ends of arguments.
+ *
+ * $my_facts_end_argument[id_val] = array ("predicate"=>string,
+ *    "constant"=>string, "is_negated"=>string, "logic_display"=>string,
+ *    "is_rule"=>0, "end_argument"=>1, "dot_label"=>string,
+ *    "num_paths"=>int, "levels"=>array(of size num_paths),
+ *    "num_statuses"=>int, "statuses"=>array(string))
+ *
+ * NOTE: statuses[] can be 'IN', 'OUT', 'UNDEC'
+ */
+$my_facts_end_argument = array ();
+/** @brief int \$num_my_facts_end_argument: number of entries in
+ *         $my_facts_end_argument.
+ *
+ * Number of facts reachable by "Me" either directly or indirectly through
+ * other agents that are end of arguments.
+ */
+$num_my_facts_end_argument = 0;
+
+/** @brief array $agents_assoc_my_facts: array (with key=id_val) of agentID's
+ *         that have this fact as part of their beliefs either directly or
+ *         indirectly.
+ *
+ * $agents_assoc_my_facts[fact_id_val] = array(agent_ids)
+ */
+$agents_assoc_my_facts = array ();
+
+/** @brief array $my_rules_not_end_argument: array (with key=id_val) of rules
+ *         reachable by "Me" that are not ends of arguments.
+ *
+ * $my_rules_not_end_argument[id_val] = array ("predicate"=>string,
+ *    "constant"=>string, "is_negated"=>string, "inference_display"=>string,
+ *    "level"=>string, "is_rule"=>1, "end_argument"=>0, "num_premises"=>int,
+ *    "premises"=>array("predicate"=>string, "constant"=>string,
+ *                      "is_negated"=>string, "logic_display"=>string),
+ *    "premises_display"=>string, "rule_display"=>string,
+ *    "inference_dot_label"=>string, "rule_dot_label"=>string)
+ */
+$my_rules_not_end_argument = array ();
+/** @brief int \$num_my_rules_not_end_argument: number of entries in
+ *         $my_rules_not_end_argument.
+ *
+ * Number of rules reachable by "Me" either directly or indirectly through
+ * other agents that are not end of arguments.
+ */
+$num_my_rules_not_end_argument = 0;
+
+/** @brief array $my_rules_end_argument: array (with key=id_val) of rules
+ *        reachable by "Me" that are ends of arguments.
+ *
+ * $my_rules_end_argument[id_val] = array ("predicate"=>string,
+ *    "constant"=>string, "is_negated"=>string, "inference_display"=>string,
+ *    "is_rule"=>1, "end_argument"=>1, "level"=>string, "num_premises"=>int,
+ *    "premises"=>array("predicate"=>string, "constant"=>string,
+ *                      "is_negated"=>string, "logic_display"=>string),
+ *    "premises_display"=>string, "rule_display"=>string,
+ *    "num_statuses"=>int, "statuses"=>array(string),
+ *    "inference_dot_label"=>string, "rule_dot_label"=>string)
+ *
+ * NOTE: statuses[] can be 'IN', 'OUT', 'UNDEC'
+ */
+$my_rules_end_argument = array ();
+/** @brief int \$num_my_rules_end_argument: number of entries in
+ *         $my_rules_end_argument.
+ *
+ * Number of rules reachable by "Me" either directly or indirectly through
+ * other agents that are end of arguments.
+ */
+$num_my_rules_end_argument = 0;
+
+/** @brief array $belief_arrows: array (with key=fromID."_".toID) of arrow
+ *               information between beliefs.
+ *
+ * $belief_arrows[fromID_toID] = array("from_id"=>string,
+ *     "from_dot_label"=>string, "from_rule"=>string ("1" or "0"),
+ *     "from_ref"=>(reference to $my_beliefs[fromID]), "to_id"=>string,
+ *     "to_dot_label"=>string, "to_ref"=>(reference to $my_beliefs[toID]))
+ */
+$belief_arrows = array();
+/** @brief int \$num_belief_arrows: number of entries in $belief_arrows.
+ */
+$num_belief_arrows = 0;
+/** @brief array $belief_arrows_from: array (key=fromID) of belief arrows'
+ *         information that emanate/start from belief ID (fromID).
+ *
+ * $belief_arrows_from[fromID] = array(toID=>reference to
+ *                                     $belief_arrows[fromID."_".toID])
+ */
+$belief_arrows_from = array();
+/** @brief int \$num_belief_arrows: number of entries in $belief_arrows_from.
+ */
+$num_belief_arrows_from = 0;
+/** 
+ * @brief array $belief_arrows_to: array (key=toID) of belief arrows'
+ *        information  that end at belief ID (toID).
+ *
+ * $belief_arrows_to[toID] = array(fromID=>reference to
+ *                                 $belief_arrows[fromID."_".toID])
+ */
+$belief_arrows_to = array();
+/** @brief int \$num_belief_arrows: number of entries in $belief_arrows_to.
+ */
+$num_belief_arrows_to = 0;
+
+/** @brief array $attack_arrows: array (with key fromID."_".toID) of arrow
+ *         information regarding belief with id fromID that rebuts or
+ *          undermines the belief with id toID.
+ *
+ * $attack_arrows[fromID_toID] = array ("from_id"=>string,
+ *    "from_dot_label"=>string, "from_rule"=>string (0 or 1 if rule),
+ *    "from_ref"=>(reference to $my_beliefs[fromID]), "to_id"=>string,
+ *    "to_dot_label"=>string, "to_rule"="string("0 or "1" if rule),
+ *    "to_ref"=>(reference to $my_beliefs[toID]),
+ *    "attack_type"=>string("rebut" or "undermine"))
+ */
+$attack_arrows = array ();
+/** @brief int \$num_attack_arrows: number of entries in $attack_arrows.
+ */
+$num_attack_arrows = 0;
+
+/** @brief array $agent_arrows: array (with key fromID."_".toID) of arrow
+ *         information regarding agents with fromID that directly trust
+ *         agents with toID.
+ *
+ * $agent_arrows[fromID_toID] = array("from_id"=>string,
+ *     "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID],
+ *     "to_id"=>string, "to_dot_label"=>string, "to_ref"=>(reference to
+ *     $agents[toID]), "level"=>string)
+ */
+$agent_arrows = array();
+/** @brief int \$num_agent_arrows: number of entries in $agent_arrows
+ */
+$num_agent_arrows = 0;
+/** @brief array $agent_arrows_from: array (key=fromID) of agent arrows'
+ *         information that emanate/start from agent ID (fromID).
+ *
+ * $agent_arrows_from[fromID] = array(toID=>reference to
+ *                                    $agent_arrows[fromID."_".toID])
+ */
+$agent_arrows_from = array();
+/** @brief int \$num_agent_arrows_from: number of entries in $agent_arrows_from
+ */
+$num_agent_arrows_from = 0;
+/** @brief array $agent_arrows_to: array (key=toID) of agent arrows'
+ *         information that end at agent ID (toID).
+ *
+ * $agent_arrows_to[toID] = array(fromID=>reference to
+ *                                $agent_arrows[fromID."_".toID])
+ */
+$agent_arrows_to = array();
+/** @brief int \$num_agent_arrows_to: number of entries in $agent_arrows_to
+ */
+$num_agent_arrows_to = 0;
+
+/** @brief array $agent_belief_arrows: array (with key fromID."_".toID) of
+ *         arrow information connecting agent (with id fromID) to it's direct
+ *         beliefs (with id toID).
+ *
+ * $agent_belief_arrows[fromID_toID] = array("from_id"=>string,
+ *    "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID],
+ *    "to_id"=>string, "to_dot_label"=>string, "to_rule"=>string(0 or 1),
+ *    "to_ref"=>(reference to $my_beliefs[toID]), "level"=>string)
+ */
+$agent_belief_arrows = array();
+/** @brief int \$num_agent_belief_arrows: number of entries in 
+ *         $agent_belief_arrows
+ */
+$num_agent_belief_arrows = 0;
+/** @brief array $agent_belief_arrows_from: array (key=fromID) of agent to
+ *         belief arrows' information that start from agent ID (fromID).
+ *
+ * $agent_belief_arrows_from[fromID] = array(toID=>reference to
+ *                                     $agent_belief_arrows[fromID."_".toID])
+ */
+$agent_belief_arrows_from = array();
+/** @brief int \$num_agent_belief_arrows_from: number of entries in 
+ *         $agent_belief_arrows_from
+ */
+$num_agent_belief_arrows_from = 0;
+/** @brief array $agent_belief_arrows_to: array (key=toID) of agent to belief
+ *         arrows' information that end at belief ID (toID)
+ *
+ * $agent_belief_arrows_to[toID] = array(fromID=>reference to
+ *                                     $agent_belief_arrows[fromID."_".toID])
+ */
+$agent_belief_arrows_to = array();
+/** @brief int \$num_agent_belief_arrows_to: number of entries in 
+ *         $agent_belief_arrows_to
+ */
+$num_agent_belief_arrows_to = 0;
+
+/** @brief array $arguments: array (with key argument_id) of argument
+ *         information.
+ *
+ * $arguments[id_val] = array("level"=>string, "status"=>string,
+ *     "conclusion_display"=>string, "num_agentIDs"=>int,
+ *     "agentIDs"=>array(agent_ids),
+ *     "num_beliefIDs"=>int, beliefIDs=>array(belief_ids))
+ */
+$arguments = array ();
+/** @brief int \$num_arguments: number of entries in $arguments
+ */
+$num_arguments = 0;
+
+/*
+ * Create agents data structure
+ */
 $sql="SELECT DISTINCT agentID, agentName FROM agents 
          INNER JOIN agent_trust on (trustingAgent = agentID or trustedAgent = agentID) 
          where sessionID = '".$sessionID."' and timestep=".$timestep;
@@ -27,33 +314,10 @@ if ($debug) {
     printf("//num_agents=%d or %d\n", $num_agents, count($agents));
 }
 
-// VARS:
-// $my_beliefs[id_val] = ref (beliefs = facts + rules)
-// $num_my_beliefs = int
-// $my_facts[id_val] = ref
-// $num_my_facts = int
-// $my_rules[id_val] = ref
-// $num_my_rules = int
-$my_beliefs = array (); $num_my_beliefs = 0;
-$my_facts = array (); $num_my_facts = 0;
-$my_rules = array (); $num_my_rules = 0;
 /*
 * Create facts data structure for agentID=1 (usually 'Me') that aren't ends of
 * arguments
 */
-// VARS:
-// NOTE: a fact can be reached from many different agents. Hence var
-// "num_paths". TODO (potential bug): There could be a case when the levels
-// are the same but the fact is reached from 2 or more paths and this will not
-// be caught.
-// 
-// $my_facts_not_end_argument[id_val] = array(predicate=>string,
-//    constant=>string, is_negated=>string, logic_display=>string,
-//    num_paths=>int, levels=>array(of size num_paths), is_rule=>0,
-//    end_argument=>0, dot_label=>string)
-// $num_my_facts_not_end_argument = int
-$my_facts_not_end_argument = array ();
-$num_my_facts_not_end_argument = 0;
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate, level,
@@ -144,16 +408,6 @@ if ($debug) {
 * Create facts data structure for agentID=1 (usually 'Me') that are argument
 * conclusions
 */
-// VARS:
-// $my_facts_end_argument[id_val] = array (predicate=>string,
-//    constant=>string, is_negated=>string, logic_display=>string,
-//    is_rule=>0, end_argument=>1, dot_label=>string,
-//    num_paths=>int, levels=>array(of size num_paths),
-//    num_statuses=>int, statuses=>array(string))
-// NOTE: statuses[] can be 'IN', 'OUT', 'UNDEC'
-// $num_my_facts_end_argument = int
-$my_facts_end_argument = array ();
-$num_my_facts_end_argument = 0;
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate, ab.level, max(pa.status), count(distinct pa.status) as argStatus,
@@ -263,12 +517,7 @@ if ($debug) {
     printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
 }
 
-// VARS:
-// $agents_assoc_my_facts[fact_id_val] is an array of agent ids' that have
-// this fact in their beliefs either directly or indirectly.
-// $agents_assoc_my_facts[fact_id_val] = array(agent_ids)
-// 
-$agents_assoc_my_facts = array ();
+// Fill agents_assoc_my_facts
 foreach ($my_facts as $id=>$info) {
     $sql = "select distinct a.agentID from agents a
             inner join agent_has_beliefs ab on ab.agentID = a.agentID
@@ -288,17 +537,6 @@ foreach ($my_facts as $id=>$info) {
 * Create rules data structure for agentID=1 (usually 'Me') that aren't
 * argument ends
 */
-// VARS:
-// $my_rules_not_end_argument[id_val] = array (predicate=>string,
-//    constant=>string, is_negated=>string, inference_display=>string,
-//    level=>float, is_rule = 1, end_argument = 0, num_premises=>int,
-//    premises=>array(predicate=>string, constant=>string,
-//                    is_negated=>string, logic_display=>string),
-//    premises_display=>string, rule_display=>string,
-//    inference_dot_label=>string, rule_dot_label=>string)
-// $num_my_rules_not_end_argument = int
-$my_rules_not_end_argument = array ();
-$num_my_rules_not_end_argument = 0;
 $sql="select distinct b.beliefID, CASE 
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate, level,
@@ -410,19 +648,6 @@ if ($debug) {
 * Create rules data structure for agentID=1 (usually 'Me') that are argument
 * conclusions
 */
-// VARS:
-// $my_rules_end_argument[id_val] = array (predicate=>string,
-//    constant=>string, is_negated=>string, inference_display=>string,
-//    is_rule = 1, end_argument = 1, level=>float, num_premises=>int,
-//    premises=>array(predicate=>string, constant=>string,
-//                    is_negated=>string, logic_display=>string),
-//    premises_display=>string, rule_display=>string,
-//    num_statuses=>int, statuses=>array(string),
-//    inference_dot_label=>string, rule_dot_label=>string)
-// NOTE: statuses[] can be 'IN', 'OUT', 'UNDEC'
-// $num_my_rules_end_argument = int
-$my_rules_end_argument = array ();
-$num_my_rules_end_argument = 0;
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate, ab.level,
@@ -556,21 +781,6 @@ if ($debug) {
 /*
 * Create data structure for arrows between beliefs
 */
-// VARS:
-// $belief_arrows[fromID_toID] = array(from_id=>string, from_dot_label=>string,
-//     from_rule = int (1 or 0), from_ref=<ref>, to_id=>string,
-//     to_dot_label=>string, to_ref=<ref>)
-// $num_belief_arrows = int
-// $belief_arrows_from[fromID] = array(toID=>ref)
-// $num_belief_arrows_from = int
-// $belief_arrows_to[toID] = array(fromID=>ref)
-// $num_belief_arrows_to = int
-$belief_arrows = array();
-$num_belief_arrows = 0;
-$belief_arrows_from = array();
-$num_belief_arrows_from = 0;
-$belief_arrows_to = array();
-$num_belief_arrows_to = 0;
 $sql="select distinct case when b1.isRule = 1 then concat('inference',a.beliefID) else concat('fact',a.beliefID) end fromID, 
     case when b2.isRule = 1 then concat('rule',ab.beliefID) else concat('fact',ab.beliefID) end toID,
     b1.isRule, a.beliefID, ab.beliefID
@@ -661,14 +871,6 @@ if ($debug) {
 /*
 * Create data structure for arrows for attacks (rebut and undermine)
 */
-// VARS:
-// $attack_arrows[fromID_toID] = array (from_id=>string, from_dot_label=>string,
-//    from_rule = int (0 or 1 if rule), from_ref=ref, to_id=>string,
-//    to_dot_label=>string, to_rule = int (0 or 1 if rule), to_ref = ref,
-//    attack_type = string ("rebut" or "undermine"))
-// $num_attack_arrows = int
-$attack_arrows = array ();
-$num_attack_arrows = 0;
 $sql="select distinct case when b.isRule = 1 then concat('inference',b.beliefID)
                   else concat('fact',b.beliefID) END fromID,
              case when b2.isRule = 1 then concat('inference',b2.beliefID)
@@ -739,21 +941,6 @@ if ($debug) {
 /*
 * Create data structure for arrows between agents
 */
-// VARS:
-// $agent_arrows[fromID_toID] = array(from_id=>string, from_dot_label=>string,
-//     from_ref=ref, to_id=>string, to_dot_label=>string, to_ref=>ref,
-//     level=>string)
-// $num_agent_arrows = int
-// $agent_arrows_from[fromID] = array(toID=>ref)
-// $num_agent_arrows_from = int
-// $agent_arrows_to[toID] = array(fromID=>ref)
-// $num_agent_arrows_to = int
-$agent_arrows = array();
-$num_agent_arrows = 0;
-$agent_arrows_from = array();
-$num_agent_arrows_from = 0;
-$agent_arrows_to = array();
-$num_agent_arrows_to = 0;
 $sql="select concat('agent',trustingAgent), concat('agent',trustedAgent),
           trustingAgent, trustedAgent, level
           from agent_trust where sessionID = '".$sessionID."' and timestep=".$timestep;
@@ -818,21 +1005,6 @@ if ($debug) {
 /*
 * Create data structure for arrows between agents and their direct beliefs
 */
-// VARS:
-// $agent_belief_arrows[fromID_toID] = array(from_id=>string,
-///    from_dot_label=>string, from_ref=>ref, to_id=>string, to_dot_label=>string, 
-//     to_rule=>0 or 1, to_ref=>ref, level=>string)
-// $num_agent_belief_arrows = int
-// $agent_belief_arrows_from[fromID] = array(toID=>ref)
-// $num_agent_belief_arrows_from = int
-// $agent_belief_arrows_to[toID] = array(fromID=>ref)
-// $num_agent_belief_arrows_to = int
-$agent_belief_arrows = array();
-$num_agent_belief_arrows = 0;
-$agent_belief_arrows_from = array();
-$num_agent_belief_arrows_from = 0;
-$agent_belief_arrows_to = array();
-$num_agent_belief_arrows_to = 0;
 $sql="select distinct concat('agent',ab.agentID),
     case when isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
     ab.agentID, isRule, b.beliefID, ab.level
@@ -915,14 +1087,6 @@ if ($debug) {
 * Create data structure for arguments.
 * Find agentIDs and beliefIDs for arguments
 */
-// VARS:
-// $arguments[id_val] = array(level=>string, status=>string,
-//     conclusion_display=>string, num_agentIDs=>int, agentIDs=>array(strings),
-//     num_beliefIDs=>int, beliefIDs=>array(strings))
-// $num_arguments = int
-$arguments = array ();
-$num_arguments = 0;
-
 $sql = "select pa.parentArgumentID, pa.level, pa.status, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate
