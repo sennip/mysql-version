@@ -19,22 +19,22 @@ digraph g {
  * the user selected fact within the "Observed Knowledge" radio elements.
  *
  * Generates dot file highlighting all the elements associated with the user
- * selected fact or observed knowledge starting from "Me" using data structures
- * defined in file datagen_db.php. Those elements not fully contained in the
- * selected fact/observed knowledge are greyed out.
+ * selected fact or observed knowledge starting from agent posing question
+ * using data structures defined in file datagen_db.php. Those elements not
+ * fully contained in the selected fact/observed knowledge are greyed out.
  */
 
 
 $agentIDs = array_keys($agents);
 /** @page dotgen_observed_impl
  *
- * * Use $agents_assoc_my_facts to obtain all agents that have this fact ID
+ * * Use $agents_assoc_qagnt_facts to obtain all agents that have this fact ID
  * ($beliefID) as part of their beliefs either directly or indirectly. Populate
  * $agents_not_assoc_beliefID with those agents that don't have this fact as
  * part of their direct or indirect beliefs.
  */
 $agents_not_assoc_beliefID = array_diff($agentIDs,
-                                        $agents_assoc_my_facts[$beliefID]);
+                                        $agents_assoc_qagnt_facts[$beliefID]);
 
 /** @page dotgen_observed_impl
  *
@@ -47,7 +47,7 @@ $agents_not_assoc_beliefID = array_diff($agentIDs,
  *  + Create agents associated (even indirectly) with this $beliefID (which
  * is a fact)
  */
-foreach ($agents_assoc_my_facts[$beliefID] as $id) {
+foreach ($agents_assoc_qagnt_facts[$beliefID] as $id) {
     printf("%s [label=%s, fontsize=80, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $agents[$id]["dot_label"], $agents[$id]["name"]);
 }
@@ -58,7 +58,7 @@ foreach ($agents_assoc_my_facts[$beliefID] as $id) {
  * the agents that have this fact in their beliefs
  */
 foreach ($agent_arrows_to as $to=>$info) {
-    if (in_array($to, $agents_assoc_my_facts[$beliefID])) {
+    if (in_array($to, $agents_assoc_qagnt_facts[$beliefID])) {
         foreach ($info as $from => $from_to_arrow) {
             printf("%s -> %s [color=yellow, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n", 
                    $from_to_arrow["from_dot_label"],
@@ -72,13 +72,13 @@ foreach ($agent_arrows_to as $to=>$info) {
  *  + Create this fact node (with id $beliefID) (which can be either an end
  * or not of an argument)
  */
-if ($my_facts[$beliefID]["end_argument"] == 0) {
+if ($qagnt_facts[$beliefID]["end_argument"] == 0) {
     printf("%s [label=\"%s:%s\", shape=box, fillcolor=lightcyan, fontsize=60, height=\"1.5\", width=9.5, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-           $my_facts[$beliefID]["dot_label"],
-           $my_facts[$beliefID]["logic_display"],
-           min($my_facts[$beliefID]["levels"]));
+           $qagnt_facts[$beliefID]["dot_label"],
+           $qagnt_facts[$beliefID]["logic_display"],
+           min($qagnt_facts[$beliefID]["levels"]));
 } else {
-    $info = $my_facts[$beliefID];
+    $info = $qagnt_facts[$beliefID];
     if ($info["num_statuses"] == 1) {
         if ($info["statuses"][0] == "IN") {
             printf("%s [label=\"%s:%s : %s\", shape=box, fillcolor=palegreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -135,7 +135,7 @@ foreach ($agents_not_assoc_beliefID as $id) {
  *  + Create other fact nodes with id NOT $beliefID (that can be either end
  * of an argument or not)
  */
-foreach ($my_facts as $id=>$info) {
+foreach ($qagnt_facts as $id=>$info) {
     if ($id != $beliefID) {
         if ($info["end_argument"] == 0) {
             printf("%s [label=\"%s:%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -159,9 +159,9 @@ foreach ($my_facts as $id=>$info) {
 
 /** @page dotgen_observed_impl
  *
- *   + Create rule nodes for agentID=1 (usually 'Me') that aren't argument ends
+ *   + Create rule nodes for agentID posing question that aren't argument ends
  */
-foreach ($my_rules_not_end_argument as $id=>$info) {
+foreach ($qagnt_rules_not_end_argument as $id=>$info) {
     printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["rule_dot_label"], $info["rule_display"], $info["level"]);
     printf("%s [label=\"%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -173,10 +173,10 @@ foreach ($my_rules_not_end_argument as $id=>$info) {
 
 /** @page dotgen_observed_impl
  *
- *  + Create rule nodes for agentID=1 (usually 'Me') that are argument
+ *  + Create rule nodes for agentID posing question that are argument
  * conclusions
  */
-foreach ($my_rules_end_argument as $id=>$info) {
+foreach ($qagnt_rules_end_argument as $id=>$info) {
       printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
              $info["rule_dot_label"], $info["rule_display"], $info["level"]);
     printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",

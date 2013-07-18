@@ -23,76 +23,80 @@ $agents = array ();
  */
 $num_agents = 0;
 
-/** @brief array $my_beliefs: key=id_val holds array of information contained
- *         in $my_facts and $my_rules.
+/** @brief array $qagnt_beliefs: key=id_val holds array of information
+ *         contained in $qagnt_facts and $qagnt_rules.
  *
- * $my_beliefs[id_val] = reference to an entry either in $my_facts or $my_rules.
+ * $qagnt_beliefs[id_val] = reference to an entry either in $qagnt_facts or
+ *                          $qagnt_rules.
  */
-$my_beliefs = array ();
-/** @brief int \$num_my_beliefs: number of entries in $my_beliefs.
+$qagnt_beliefs = array ();
+/** @brief int \$num_qagnt_beliefs: number of entries in $qagnt_beliefs.
  *
- * Number of beliefs reachable by "Me" either directly or indirectly through
- * other agents. NOTE: not used and can be removed.
+ * Number of beliefs reachable by agent who poses question either directly or
+ * indirectly through other agents. NOTE: not used and can be removed.
  */
-$num_my_beliefs = 0;
+$num_qagnt_beliefs = 0;
 
-/** @brief array $my_facts: key=id_val stores array of information
- *         contained in $my_facts_not_end_argument and $my_facts_end_argument.
+/** @brief array $qagnt_facts: key=id_val stores array of information
+ *         contained in $qagnt_facts_not_end_argument and
+ *         $qagnt_facts_end_argument.
  *
- * $my_facts[id_val] = reference to an entry either in
- *                     $my_facts_not_end_argument or $my_facts_end_argument.
+ * $qagnt_facts[id_val] = reference to an entry either in
+ *                  $qagnt_facts_not_end_argument or $qagnt_facts_end_argument.
  */
-$my_facts = array ();
-/** @brief int \$num_my_facts: number of entries in $my_facts.
+$qagnt_facts = array ();
+/** @brief int \$num_qagnt_facts: number of entries in $qagnt_facts.
  *
- * Number of facts reachable by "Me" either directly or indirectly through
- * other agents. NOTE: not used and can be removed.
+ * Number of facts reachable by agent posing question either directly or
+ * indirectly through other agents. NOTE: not used and can be removed.
  */
-$num_my_facts = 0;
+$num_qagnt_facts = 0;
 
-/** @brief array $my_rules: key=id_val stores array of information contained
- *         in $my_rules_not_end_argument and $my_rules_end_argument.
+/** @brief array $qagnt_rules: key=id_val stores array of information contained
+ *         in $qagnt_rules_not_end_argument and $qagnt_rules_end_argument.
  *
- * $my_rules[id_val] = reference to an entry either in
- *                     $my_rules_not_end_argument or $my_rules_end_argument.
+ * $qagnt_rules[id_val] = reference to an entry either in
+ *                  $qagnt_rules_not_end_argument or $qagnt_rules_end_argument.
  */
-$my_rules = array ();
-/** @brief int \$num_my_rules: number of entries in $my_rules.
+$qagnt_rules = array ();
+/** @brief int \$num_qagnt_rules: number of entries in $qagnt_rules.
  *
- * Number of rules reachable by "Me" either directly or indirectly through
- * other agents. NOTE: not used and can be removed.
+ * Number of rules reachable by agent posing question either directly or
+ * indirectly through other agents. NOTE: not used and can be removed.
  */
-$num_my_rules = 0;
+$num_qagnt_rules = 0;
 
-/** @brief array $my_facts_not_end_argument: key=id_val contains array of facts
- *         reachable by "Me" that are not ends of arguments.
+/** @brief array $qagnt_facts_not_end_argument: key=id_val contains array of
+ *         facts reachable by agent posing question that are not ends of
+ *         arguments.
  *
- * $my_facts_not_end_argument[id_val] = array("predicate"=>string,
+ * $qagnt_facts_not_end_argument[id_val] = array("predicate"=>string,
  *    "constant"=>string, "is_negated"=>string, "logic_display"=>string,
  *    "num_paths"=>int, "levels"=>array(of size num_paths), "is_rule"=>0,
  *    "end_argument"=>0, "dot_label"=>string)
  *
- * NOTE: a fact can be reached by "Me" from many different paths through
- * different agents. Hence key "num_paths" and corr. number of "levels".
+ * NOTE: a fact can be reached by agent posing question from many different
+ * paths through different agents. Hence key "num_paths" and corresponding
+ * number of "levels".
  *
  * TODO (potential bug): There could be a case when the direct or indirect
- * belief levels from "Me" are the same but the fact is reached from 2 or more
- * paths and this will not be caught.
+ * belief levels from agent posing question are the same but the fact is
+ * reached from 2 or more paths and this will not be caught.
  */
-$my_facts_not_end_argument = array ();
-/** @brief int \$num_my_facts_not_end_argument: number of entries in
- *         $my_facts_not_end_argument.
+$qagnt_facts_not_end_argument = array ();
+/** @brief int \$num_qagnt_facts_not_end_argument: number of entries in
+ *         $qagnt_facts_not_end_argument.
  *
- * Number of facts reachable by "Me" either directly or indirectly through
- * other agents that are not end of arguments. NOTE: not used and can be
- * removed.
+ * Number of facts reachable by agent posing question either directly or
+ * indirectly through other agents that are not end of arguments. NOTE: not
+ * used and can be removed.
  */
-$num_my_facts_not_end_argument = 0;
+$num_qagnt_facts_not_end_argument = 0;
 
-/** @brief array $my_facts_end_argument: key=id_val contains array of facts
- *         reachable by "Me" that are ends of arguments.
+/** @brief array $qagnt_facts_end_argument: key=id_val contains array of facts
+ *         reachable by agent posing question that are ends of arguments.
  *
- * $my_facts_end_argument[id_val] = array ("predicate"=>string,
+ * $qagnt_facts_end_argument[id_val] = array ("predicate"=>string,
  *    "constant"=>string, "is_negated"=>string, "logic_display"=>string,
  *    "is_rule"=>0, "end_argument"=>1, "dot_label"=>string,
  *    "num_paths"=>int, "levels"=>array(of size num_paths),
@@ -100,27 +104,29 @@ $num_my_facts_not_end_argument = 0;
  *
  * NOTE: statuses[i] can be 'IN', 'OUT', 'UNDEC'
  */
-$my_facts_end_argument = array ();
-/** @brief int \$num_my_facts_end_argument: number of entries in
- *         $my_facts_end_argument.
+$qagnt_facts_end_argument = array ();
+/** @brief int \$num_qagnt_facts_end_argument: number of entries in
+ *         $qagnt_facts_end_argument.
  *
- * Number of facts reachable by "Me" either directly or indirectly through
- * other agents that are end of arguments. NOTE: not used and can be removed.
+ * Number of facts reachable by agent posing question either directly or
+ * indirectly through other agents that are end of arguments. NOTE: not used
+ * and can be removed.
  */
-$num_my_facts_end_argument = 0;
+$num_qagnt_facts_end_argument = 0;
 
-/** @brief array $agents_assoc_my_facts: key=id_val stores array of agentID's
+/** @brief array $agents_assoc_qagnt_facts: key=id_val stores array of agentID's
  *         that have this fact as part of their beliefs either directly or
  *         indirectly.
  *
- * $agents_assoc_my_facts[fact_id_val] = array(agent_ids)
+ * $agents_assoc_qagnt_facts[fact_id_val] = array(agent_ids)
  */
-$agents_assoc_my_facts = array ();
+$agents_assoc_qagnt_facts = array ();
 
-/** @brief array $my_rules_not_end_argument: key=id_val contains array of rules
- *         reachable by "Me" that are not ends of arguments.
+/** @brief array $qagnt_rules_not_end_argument: key=id_val contains array of
+ *         rules reachable by agent posing question that are not ends of
+ *         arguments.
  *
- * $my_rules_not_end_argument[id_val] = array ("predicate"=>string,
+ * $qagnt_rules_not_end_argument[id_val] = array ("predicate"=>string,
  *    "constant"=>string, "is_negated"=>string, "inference_display"=>string,
  *    "level"=>string, "is_rule"=>1, "end_argument"=>0, "num_premises"=>int,
  *    "premises"=>array("predicate"=>string, "constant"=>string,
@@ -128,22 +134,22 @@ $agents_assoc_my_facts = array ();
  *    "premises_display"=>string, "rule_display"=>string,
  *    "inference_dot_label"=>string, "rule_dot_label"=>string)
  *
- * NOTE: inference is obtained by a rule that contains premises.
+ * NOTE: inference is obtained by a rule from premises.
  */
-$my_rules_not_end_argument = array ();
-/** @brief int \$num_my_rules_not_end_argument: number of entries in
- *         $my_rules_not_end_argument.
+$qagnt_rules_not_end_argument = array ();
+/** @brief int \$num_qagnt_rules_not_end_argument: number of entries in
+ *         $qagnt_rules_not_end_argument.
  *
- * Number of rules reachable by "Me" either directly or indirectly through
- * other agents that are not end of arguments. NOTE: not used and can be
- * removed.
+ * Number of rules reachable by agent posing question either directly or
+ * indirectly through other agents that are not end of arguments. NOTE: not
+ * used and can be removed.
  */
-$num_my_rules_not_end_argument = 0;
+$num_qagnt_rules_not_end_argument = 0;
 
-/** @brief array $my_rules_end_argument: key=id_val contains array of rules
- *        reachable by "Me" that are ends of arguments.
+/** @brief array $qagnt_rules_end_argument: key=id_val contains array of rules
+ *        reachable by agent posing question that are ends of arguments.
  *
- * $my_rules_end_argument[id_val] = array ("predicate"=>string,
+ * $qagnt_rules_end_argument[id_val] = array ("predicate"=>string,
  *    "constant"=>string, "is_negated"=>string, "inference_display"=>string,
  *    "is_rule"=>1, "end_argument"=>1, "level"=>string, "num_premises"=>int,
  *    "premises"=>array("predicate"=>string, "constant"=>string,
@@ -154,22 +160,23 @@ $num_my_rules_not_end_argument = 0;
  *
  * NOTE: statuses[i] can be 'IN', 'OUT', 'UNDEC'
  */
-$my_rules_end_argument = array ();
-/** @brief int \$num_my_rules_end_argument: number of entries in
- *         $my_rules_end_argument.
+$qagnt_rules_end_argument = array ();
+/** @brief int \$num_qagnt_rules_end_argument: number of entries in
+ *         $qagnt_rules_end_argument.
  *
- * Number of rules reachable by "Me" either directly or indirectly through
- * other agents that are end of arguments. NOTE: not used and can be removed.
+ * Number of rules reachable by agent posing question either directly or
+ * indirectly through other agents that are end of arguments. NOTE: not used
+ * and can be removed.
  */
-$num_my_rules_end_argument = 0;
+$num_qagnt_rules_end_argument = 0;
 
 /** @brief array $belief_arrows: key=fromID."_".toID contains array of arrow
  *               information between beliefs.
  *
  * $belief_arrows[fromID_toID] = array("from_id"=>string,
  *     "from_dot_label"=>string, "from_rule"=>string ("1" or "0"),
- *     "from_ref"=>(reference to $my_beliefs[fromID]), "to_id"=>string,
- *     "to_dot_label"=>string, "to_ref"=>(reference to $my_beliefs[toID]))
+ *     "from_ref"=>(reference to $qagnt_beliefs[fromID]), "to_id"=>string,
+ *     "to_dot_label"=>string, "to_ref"=>(reference to $qagnt_beliefs[toID]))
  */
 $belief_arrows = array();
 /** @brief int \$num_belief_arrows: number of entries in $belief_arrows.
@@ -206,9 +213,9 @@ $num_belief_arrows_to = 0;
  *
  * $attack_arrows[fromID_toID] = array ("from_id"=>string,
  *    "from_dot_label"=>string, "from_rule"=>string (0 or 1 if rule),
- *    "from_ref"=>(reference to $my_beliefs[fromID]), "to_id"=>string,
+ *    "from_ref"=>(reference to $qagnt_beliefs[fromID]), "to_id"=>string,
  *    "to_dot_label"=>string, "to_rule"="string("0 or "1" if rule),
- *    "to_ref"=>(reference to $my_beliefs[toID]),
+ *    "to_ref"=>(reference to $qagnt_beliefs[toID]),
  *    "attack_type"=>string("rebut" or "undermine"))
  */
 $attack_arrows = array ();
@@ -261,7 +268,7 @@ $num_agent_arrows_to = 0;
  * $agent_belief_arrows[fromID_toID] = array("from_id"=>string,
  *    "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID]),
  *    "to_id"=>string, "to_dot_label"=>string, "to_rule"=>string(0 or 1),
- *    "to_ref"=>(reference to $my_beliefs[toID]), "level"=>string)
+ *    "to_ref"=>(reference to $qagnt_beliefs[toID]), "level"=>string)
  */
 $agent_belief_arrows = array();
 /** @brief int \$num_agent_belief_arrows: number of entries in 
@@ -330,10 +337,11 @@ if ($debug == 1) {
 
 /** @page datagen_db_impl
  *
- * * Create facts data structure for agentID=1 (usually 'Me') that aren't
- * ends of arguments.  Fill in $my_facts_not_end_argument and
- * $num_my_facts_not_end_argument as well as partially build $my_facts,
- * $my_beliefs, $num_my_facts, and $num_my_beliefs.
+ * * Create facts data structure for the agentID that poses the question
+ * (called "qagnt") that aren't ends of arguments.
+ * Fill in $qagnt_facts_not_end_argument and $num_qagnt_facts_not_end_argument
+ * as well as partially build $qagnt_facts, $qagnt_beliefs, $num_qagnt_facts,
+ * and $num_qagnt_beliefs.
  */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
@@ -346,7 +354,7 @@ $sql="select distinct b.beliefID, CASE
         inner join constants c on pc.constantID = c.constantID 
         inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
         inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-        where ab.agentID = 1 and b.isRule = 0 and a.isSupported = 1
+        where ab.agentID = q.agentID and b.isRule = 0 and a.isSupported = 1
         and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
         and b.beliefID NOT IN (select distinct b.beliefID 
                                 from arguments a 
@@ -358,75 +366,79 @@ $sql="select distinct b.beliefID, CASE
 $result=mysqli_query($link,$sql);
 if ($result) {
     while ($row = mysqli_fetch_array($result)) {
-        if (array_key_exists($row[0], $my_facts_not_end_argument)) {
-            $num_paths = $my_facts_not_end_argument[$row[0]]["num_paths"];
-            $my_facts_not_end_argument[$row[0]]["levels"][$num_paths] = $row[2];
-            $my_facts_not_end_argument[$row[0]]["num_paths"] = $num_paths+1;
+        if (array_key_exists($row[0], $qagnt_facts_not_end_argument)) {
+            $num_paths = $qagnt_facts_not_end_argument[$row[0]]["num_paths"];
+            $qagnt_facts_not_end_argument[$row[0]]["levels"][$num_paths] = $row[2];
+            $qagnt_facts_not_end_argument[$row[0]]["num_paths"] = $num_paths+1;
         } else {
-            $my_facts_not_end_argument[$row[0]] = array ();
-            $my_facts_not_end_argument[$row[0]]["dot_label"] = "fact".$row[0];
-            $my_facts_not_end_argument[$row[0]]["logic_display"] = $row[1];
-            $my_facts_not_end_argument[$row[0]]["num_paths"] = 1;
-            $my_facts_not_end_argument[$row[0]]["levels"] = array($row[2]);
-            $my_facts_not_end_argument[$row[0]]["predicate"] = $row[3];
-            $my_facts_not_end_argument[$row[0]]["constant"] = $row[4];
-            $my_facts_not_end_argument[$row[0]]["is_negated"] = $row[5];
-            $my_facts_not_end_argument[$row[0]]["is_rule"] = 0;
-            $my_facts_not_end_argument[$row[0]]["end_argument"] = 0;
-            $my_facts[$row[0]] = & $my_facts_not_end_argument[$row[0]];
-            $my_beliefs[$row[0]] = & $my_facts_not_end_argument[$row[0]];
-            $num_my_facts_not_end_argument++;
-            $num_my_facts++;
-            $num_my_beliefs++;
+            $qagnt_facts_not_end_argument[$row[0]] = array ();
+            $qagnt_facts_not_end_argument[$row[0]]["dot_label"] = "fact".$row[0];
+            $qagnt_facts_not_end_argument[$row[0]]["logic_display"] = $row[1];
+            $qagnt_facts_not_end_argument[$row[0]]["num_paths"] = 1;
+            $qagnt_facts_not_end_argument[$row[0]]["levels"] = array($row[2]);
+            $qagnt_facts_not_end_argument[$row[0]]["predicate"] = $row[3];
+            $qagnt_facts_not_end_argument[$row[0]]["constant"] = $row[4];
+            $qagnt_facts_not_end_argument[$row[0]]["is_negated"] = $row[5];
+            $qagnt_facts_not_end_argument[$row[0]]["is_rule"] = 0;
+            $qagnt_facts_not_end_argument[$row[0]]["end_argument"] = 0;
+            $qagnt_facts[$row[0]] = & $qagnt_facts_not_end_argument[$row[0]];
+            $qagnt_beliefs[$row[0]] = & $qagnt_facts_not_end_argument[$row[0]];
+            $num_qagnt_facts_not_end_argument++;
+            $num_qagnt_facts++;
+            $num_qagnt_beliefs++;
         }
         if ($debug) {
-            printf("//my_facts_not_end_argument[%s]: is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s)\n",
+            printf("//qagnt_facts_not_end_argument[%s]: is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s)\n",
                    $row[0],
-                   $my_facts_not_end_argument[$row[0]]["is_negated"],
-                   $my_facts_not_end_argument[$row[0]]["predicate"],
-                   $my_facts_not_end_argument[$row[0]]["constant"],
-                   $my_facts_not_end_argument[$row[0]]["logic_display"],
-                   $my_facts_not_end_argument[$row[0]]["is_rule"],
-                   $my_facts_not_end_argument[$row[0]]["end_argument"],
-                   $my_facts_not_end_argument[$row[0]]["num_paths"],
-                   implode(", ", $my_facts_not_end_argument[$row[0]]["levels"]));
-            printf("//my_facts[%s]: is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s)\n",
+                   $qagnt_facts_not_end_argument[$row[0]]["is_negated"],
+                   $qagnt_facts_not_end_argument[$row[0]]["predicate"],
+                   $qagnt_facts_not_end_argument[$row[0]]["constant"],
+                   $qagnt_facts_not_end_argument[$row[0]]["logic_display"],
+                   $qagnt_facts_not_end_argument[$row[0]]["is_rule"],
+                   $qagnt_facts_not_end_argument[$row[0]]["end_argument"],
+                   $qagnt_facts_not_end_argument[$row[0]]["num_paths"],
+                   implode(", ", $qagnt_facts_not_end_argument[$row[0]]["levels"]));
+            printf("//qagnt_facts[%s]: is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s)\n",
                    $row[0],
-                   $my_facts[$row[0]]["is_negated"],
-                   $my_facts[$row[0]]["predicate"],
-                   $my_facts[$row[0]]["constant"],
-                   $my_facts[$row[0]]["logic_display"],
-                   $my_facts[$row[0]]["is_rule"],
-                   $my_facts[$row[0]]["end_argument"],
-                   $my_facts[$row[0]]["num_paths"],
-                   implode(", ", $my_facts[$row[0]]["levels"]));
-            printf("//my_beliefs[%s]: is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s)\n",
+                   $qagnt_facts[$row[0]]["is_negated"],
+                   $qagnt_facts[$row[0]]["predicate"],
+                   $qagnt_facts[$row[0]]["constant"],
+                   $qagnt_facts[$row[0]]["logic_display"],
+                   $qagnt_facts[$row[0]]["is_rule"],
+                   $qagnt_facts[$row[0]]["end_argument"],
+                   $qagnt_facts[$row[0]]["num_paths"],
+                   implode(", ", $qagnt_facts[$row[0]]["levels"]));
+            printf("//qagnt_beliefs[%s]: is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s)\n",
                    $row[0],
-                   $my_beliefs[$row[0]]["is_negated"],
-                   $my_beliefs[$row[0]]["predicate"],
-                   $my_beliefs[$row[0]]["constant"],
-                   $my_beliefs[$row[0]]["logic_display"],
-                   $my_beliefs[$row[0]]["is_rule"],
-                   $my_beliefs[$row[0]]["end_argument"],
-                   $my_beliefs[$row[0]]["num_paths"],
-                   implode(", ", $my_beliefs[$row[0]]["levels"]));
+                   $qagnt_beliefs[$row[0]]["is_negated"],
+                   $qagnt_beliefs[$row[0]]["predicate"],
+                   $qagnt_beliefs[$row[0]]["constant"],
+                   $qagnt_beliefs[$row[0]]["logic_display"],
+                   $qagnt_beliefs[$row[0]]["is_rule"],
+                   $qagnt_beliefs[$row[0]]["end_argument"],
+                   $qagnt_beliefs[$row[0]]["num_paths"],
+                   implode(", ", $qagnt_beliefs[$row[0]]["levels"]));
         }
     }
 }
 mysqli_free_result($result);
 if ($debug) {
-    printf("//num_my_facts_not_end_argument=%d or %d\n",
-           $num_my_facts_not_end_argument, count($my_facts_not_end_argument));
-    printf("//num_my_facts=%d or %d\n", $num_my_facts, count($my_facts));
-    printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
+    printf("//num_qagnt_facts_not_end_argument=%d or %d\n",
+           $num_qagnt_facts_not_end_argument,
+           count($qagnt_facts_not_end_argument));
+    printf("//num_qagnt_facts=%d or %d\n", $num_qagnt_facts,
+           count($qagnt_facts));
+    printf("//num_qagnt_beliefs=%d or %d\n", $num_qagnt_beliefs,
+           count($qagnt_beliefs));
 }
 
 /** @page datagen_db_impl
  *
- * * Create facts data structure for agentID=1 (usually 'Me') that are argument
- * conclusions, i.e., ends of arguments.  Fill in $my_facts_end_argument and
- * $num_my_facts_end_argument as well as add to $my_facts,
- * $my_beliefs, $num_my_facts, and $num_my_beliefs.
+ * * Create facts data structure for agentID posing question (qagnt) that are
+ * argument conclusions, i.e., ends of arguments.
+ * Fill in $qagnt_facts_end_argument and $num_qagnt_facts_end_argument as well
+ * as add to $qagnt_facts, $qagnt_beliefs, $num_qagnt_facts, and
+ * $num_qagnt_beliefs.
  */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
@@ -440,36 +452,36 @@ $sql="select distinct b.beliefID, CASE
         inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
         inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
         inner join parent_argument pa on pa.argumentID = a.argumentID and pa.sessionID = a.sessionID and pa.timestep = a.timestep 
-        where ab.agentID = 1 and b.isRule = 0 and a.isSupported = 1
+        where ab.agentID = q.agentID and b.isRule = 0 and a.isSupported = 1
         and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
         group by b.beliefID, b.isNegated, p.name, c.name, ab.level";    
 $result=mysqli_query($link,$sql);
 if ($result) {
     while ($row = mysqli_fetch_array($result)) {
-        if (array_key_exists($row[0], $my_facts_end_argument)) {
-            $num_paths = $my_facts_end_argument[$row[0]]["num_paths"];
-            $my_facts_end_argument[$row[0]]["levels"][$num_paths] = $row[2];
-            $my_facts_end_argument[$row[0]]["num_paths"] = $num_paths+1;
+        if (array_key_exists($row[0], $qagnt_facts_end_argument)) {
+            $num_paths = $qagnt_facts_end_argument[$row[0]]["num_paths"];
+            $qagnt_facts_end_argument[$row[0]]["levels"][$num_paths] = $row[2];
+            $qagnt_facts_end_argument[$row[0]]["num_paths"] = $num_paths+1;
         } else {
-            $my_facts_end_argument[$row[0]] = array ();
-            $my_facts_end_argument[$row[0]]["dot_label"] = "fact".$row[0];
-            $my_facts_end_argument[$row[0]]["logic_display"] = $row[1];
-            $my_facts_end_argument[$row[0]]["num_paths"] = 1;
-            $my_facts_end_argument[$row[0]]["levels"] = array($row[2]);
+            $qagnt_facts_end_argument[$row[0]] = array ();
+            $qagnt_facts_end_argument[$row[0]]["dot_label"] = "fact".$row[0];
+            $qagnt_facts_end_argument[$row[0]]["logic_display"] = $row[1];
+            $qagnt_facts_end_argument[$row[0]]["num_paths"] = 1;
+            $qagnt_facts_end_argument[$row[0]]["levels"] = array($row[2]);
             // TODO: chk if statutes are updated properly. Do we have to update
             // when array_key_exists is TRUE???
-            $my_facts_end_argument[$row[0]]["statuses"] = array($row[3]);
-            $my_facts_end_argument[$row[0]]["num_statuses"] = $row[4];
-            $my_facts_end_argument[$row[0]]["predicate"] = $row[5];
-            $my_facts_end_argument[$row[0]]["constant"] = $row[6];
-            $my_facts_end_argument[$row[0]]["is_negated"] = $row[7];
-            $my_facts_end_argument[$row[0]]["is_rule"] = 0;
-            $my_facts_end_argument[$row[0]]["end_argument"] = 1;
-            $my_facts[$row[0]] = & $my_facts_end_argument[$row[0]];
-            $my_beliefs[$row[0]] = & $my_facts_end_argument[$row[0]];
-            $num_my_facts_end_argument++;
-            $num_my_facts++;
-            $num_my_beliefs++;
+            $qagnt_facts_end_argument[$row[0]]["statuses"] = array($row[3]);
+            $qagnt_facts_end_argument[$row[0]]["num_statuses"] = $row[4];
+            $qagnt_facts_end_argument[$row[0]]["predicate"] = $row[5];
+            $qagnt_facts_end_argument[$row[0]]["constant"] = $row[6];
+            $qagnt_facts_end_argument[$row[0]]["is_negated"] = $row[7];
+            $qagnt_facts_end_argument[$row[0]]["is_rule"] = 0;
+            $qagnt_facts_end_argument[$row[0]]["end_argument"] = 1;
+            $qagnt_facts[$row[0]] = & $qagnt_facts_end_argument[$row[0]];
+            $qagnt_beliefs[$row[0]] = & $qagnt_facts_end_argument[$row[0]];
+            $num_qagnt_facts_end_argument++;
+            $num_qagnt_facts++;
+            $num_qagnt_beliefs++;
         }
         if($row[4] > 1) {
             $count = 0;
@@ -480,89 +492,92 @@ if ($result) {
                     where pa.sessionID = '".$sessionID."' and pa.timestep = ".$timestep." and b.beliefID = ".$row[0];
             $result2=mysqli_query($link,$sql);
             if ($result2) {
-                $my_facts_end_argument[$row[0]]["statuses"] = array();
+                $qagnt_facts_end_argument[$row[0]]["statuses"] = array();
                 while ($row2 = mysqli_fetch_array($result2)) {
-                    $my_facts_end_argument[$row[0]]["statuses"][$count] = $row2[0];
+                    $qagnt_facts_end_argument[$row[0]]["statuses"][$count] = $row2[0];
                     $count=$count+1;
                 }
-                $my_facts_end_argument[$row[0]]["num_statuses"] = $count;
+                $qagnt_facts_end_argument[$row[0]]["num_statuses"] = $count;
             }
             mysqli_free_result($result2);
         }
         if ($debug) {
-            printf("//my_facts_end_argument[%s]:  is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s), num_statuses=%d, statuses=(%s)\n",
+            printf("//qagnt_facts_end_argument[%s]:  is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s), num_statuses=%d, statuses=(%s)\n",
                    $row[0],
-                   $my_facts_end_argument[$row[0]]["is_negated"],
-                   $my_facts_end_argument[$row[0]]["predicate"],
-                   $my_facts_end_argument[$row[0]]["constant"],
-                   $my_facts_end_argument[$row[0]]["logic_display"],
-                   $my_facts_end_argument[$row[0]]["is_rule"],
-                   $my_facts_end_argument[$row[0]]["end_argument"],
-                   $my_facts_end_argument[$row[0]]["num_paths"],
-                   implode(", ", $my_facts_end_argument[$row[0]]["levels"]),
-                   $my_facts_end_argument[$row[0]]["num_statuses"],
-                   implode(", ", $my_facts_end_argument[$row[0]]["statuses"]));
-            printf("//my_facts[%s]:  is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s), num_statuses=%d, statuses=(%s)\n",
+                   $qagnt_facts_end_argument[$row[0]]["is_negated"],
+                   $qagnt_facts_end_argument[$row[0]]["predicate"],
+                   $qagnt_facts_end_argument[$row[0]]["constant"],
+                   $qagnt_facts_end_argument[$row[0]]["logic_display"],
+                   $qagnt_facts_end_argument[$row[0]]["is_rule"],
+                   $qagnt_facts_end_argument[$row[0]]["end_argument"],
+                   $qagnt_facts_end_argument[$row[0]]["num_paths"],
+                   implode(", ", $qagnt_facts_end_argument[$row[0]]["levels"]),
+                   $qagnt_facts_end_argument[$row[0]]["num_statuses"],
+                   implode(", ", $qagnt_facts_end_argument[$row[0]]["statuses"]));
+            printf("//qagnt_facts[%s]:  is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s), num_statuses=%d, statuses=(%s)\n",
                    $row[0],
-                   $my_facts[$row[0]]["is_negated"],
-                   $my_facts[$row[0]]["predicate"],
-                   $my_facts[$row[0]]["constant"],
-                   $my_facts[$row[0]]["logic_display"],
-                   $my_facts[$row[0]]["is_rule"],
-                   $my_facts[$row[0]]["end_argument"],
-                   $my_facts[$row[0]]["num_paths"],
-                   implode(", ", $my_facts[$row[0]]["levels"]),
-                   $my_facts[$row[0]]["num_statuses"],
-                   implode(", ", $my_facts[$row[0]]["statuses"]));
-            printf("//my_beliefs[%s]:  is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s), num_statuses=%d, statuses=(%s)\n",
+                   $qagnt_facts[$row[0]]["is_negated"],
+                   $qagnt_facts[$row[0]]["predicate"],
+                   $qagnt_facts[$row[0]]["constant"],
+                   $qagnt_facts[$row[0]]["logic_display"],
+                   $qagnt_facts[$row[0]]["is_rule"],
+                   $qagnt_facts[$row[0]]["end_argument"],
+                   $qagnt_facts[$row[0]]["num_paths"],
+                   implode(", ", $qagnt_facts[$row[0]]["levels"]),
+                   $qagnt_facts[$row[0]]["num_statuses"],
+                   implode(", ", $qagnt_facts[$row[0]]["statuses"]));
+            printf("//qagnt_beliefs[%s]:  is_negated=%s, pred=%s, const=%s, logic='%s', is_rule=%d, end_argument=%d, num_paths=%s, levels=(%s), num_statuses=%d, statuses=(%s)\n",
                    $row[0],
-                   $my_beliefs[$row[0]]["is_negated"],
-                   $my_beliefs[$row[0]]["predicate"],
-                   $my_beliefs[$row[0]]["constant"],
-                   $my_beliefs[$row[0]]["logic_display"],
-                   $my_beliefs[$row[0]]["is_rule"],
-                   $my_beliefs[$row[0]]["end_argument"],
-                   $my_beliefs[$row[0]]["num_paths"],
-                   implode(", ", $my_beliefs[$row[0]]["levels"]),
-                   $my_beliefs[$row[0]]["num_statuses"],
-                   implode(", ", $my_beliefs[$row[0]]["statuses"]));
+                   $qagnt_beliefs[$row[0]]["is_negated"],
+                   $qagnt_beliefs[$row[0]]["predicate"],
+                   $qagnt_beliefs[$row[0]]["constant"],
+                   $qagnt_beliefs[$row[0]]["logic_display"],
+                   $qagnt_beliefs[$row[0]]["is_rule"],
+                   $qagnt_beliefs[$row[0]]["end_argument"],
+                   $qagnt_beliefs[$row[0]]["num_paths"],
+                   implode(", ", $qagnt_beliefs[$row[0]]["levels"]),
+                   $qagnt_beliefs[$row[0]]["num_statuses"],
+                   implode(", ", $qagnt_beliefs[$row[0]]["statuses"]));
         }
     }
 }
 mysqli_free_result($result);
 if ($debug) {
-    printf("//num_my_facts_end_argument=%d or %d\n", $num_my_facts_end_argument,
-           count($my_facts_end_argument));
-    printf("//num_my_facts=%d or %d\n", $num_my_facts, count($my_facts));
-    printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
+    printf("//num_qagnt_facts_end_argument=%d or %d\n",
+           $num_qagnt_facts_end_argument,
+           count($qagnt_facts_end_argument));
+    printf("//num_qagnt_facts=%d or %d\n",
+           $num_qagnt_facts, count($qagnt_facts));
+    printf("//num_qagnt_beliefs=%d or %d\n",
+           $num_qagnt_beliefs, count($qagnt_beliefs));
 }
 
 /** @page datagen_db_impl
  *
  * * Create data structure that stores all agents that have a fact in their
- * beliefs either directly or indirectly. Fill agents_assoc_my_facts.
+ * beliefs either directly or indirectly. Fill agents_assoc_qagnt_facts.
  */
-foreach ($my_facts as $id=>$info) {
+foreach ($qagnt_facts as $id=>$info) {
     $sql = "select distinct a.agentID from agents a
             inner join agent_has_beliefs ab on ab.agentID = a.agentID
             where ab.sessionID = '".$sessionID."' and ab.timestep = ".$timestep." and ab.beliefID = ".$id.";";
     $result=mysqli_query($link,$sql);
     if ($result) {
-        $agents_assoc_my_facts[$id] = array ();
+        $agents_assoc_qagnt_facts[$id] = array ();
         while ($row = mysqli_fetch_array($result)) {
-            $agents_assoc_my_facts[$id][] = $row[0];
+            $agents_assoc_qagnt_facts[$id][] = $row[0];
         }
-        printf("//agents_assoc_my_facts[%s] = (%s)\n", $id,
-               implode(", ", $agents_assoc_my_facts[$id]));
+        printf("//agents_assoc_qagnt_facts[%s] = (%s)\n", $id,
+               implode(", ", $agents_assoc_qagnt_facts[$id]));
     }
 }
 
 /** @page datagen_db_impl
  *
- * * Create rules data structure for agentID=1 (usually 'Me') that aren't
- * argument ends. Fill in $my_rules_not_end_argument and
- * $num_my_rules_not_end_argument as well as partially add to $my_rules,
- * $my_beliefs, $num_my_rules, and $num_my_beliefs.
+ * * Create rules data structure for agentID posing question that aren't
+ * argument ends. Fill in $qagnt_rules_not_end_argument and
+ * $num_qagnt_rules_not_end_argument as well as partially add to $qagnt_rules,
+ * $qagnt_beliefs, $num_qagnt_rules, and $num_qagnt_beliefs.
  */
 $sql="select distinct b.beliefID, CASE 
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
@@ -575,7 +590,7 @@ $sql="select distinct b.beliefID, CASE
         inner join constants c on pc.constantID = c.constantID 
         inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
         inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-        where ab.agentID = 1 and b.isRule = 1 and a.isSupported=1
+        where ab.agentID = q.agentID and b.isRule = 1 and a.isSupported=1
         and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
         and b.beliefID NOT IN (select distinct b.beliefID 
                                 from arguments a 
@@ -587,18 +602,18 @@ $sql="select distinct b.beliefID, CASE
 $result=mysqli_query($link,$sql);
 if ($result) {
     while ($row = mysqli_fetch_array($result)) {
-        $my_rules_not_end_argument[$row[0]] = array();
-        $my_rules_not_end_argument[$row[0]]["inference_dot_label"] = "inference".$row[0];
-        $my_rules_not_end_argument[$row[0]]["rule_dot_label"] = "rule".$row[0];
-        $my_rules_not_end_argument[$row[0]]["inference_display"] = $row[1];
-        $my_rules_not_end_argument[$row[0]]["level"] = $row[2];
-        $my_rules_not_end_argument[$row[0]]["predicate"] = $row[3];
-        $my_rules_not_end_argument[$row[0]]["constant"] = $row[4];
-        $my_rules_not_end_argument[$row[0]]["is_negated"] = $row[5];
-        $my_rules_not_end_argument[$row[0]]["is_rule"] = 1;
-        $my_rules_not_end_argument[$row[0]]["end_argument"] = 0;
-        $my_rules_not_end_argument[$row[0]]["num_premises"] = 0;
-        $my_rules_not_end_argument[$row[0]]["premises"] = array();
+        $qagnt_rules_not_end_argument[$row[0]] = array();
+        $qagnt_rules_not_end_argument[$row[0]]["inference_dot_label"] = "inference".$row[0];
+        $qagnt_rules_not_end_argument[$row[0]]["rule_dot_label"] = "rule".$row[0];
+        $qagnt_rules_not_end_argument[$row[0]]["inference_display"] = $row[1];
+        $qagnt_rules_not_end_argument[$row[0]]["level"] = $row[2];
+        $qagnt_rules_not_end_argument[$row[0]]["predicate"] = $row[3];
+        $qagnt_rules_not_end_argument[$row[0]]["constant"] = $row[4];
+        $qagnt_rules_not_end_argument[$row[0]]["is_negated"] = $row[5];
+        $qagnt_rules_not_end_argument[$row[0]]["is_rule"] = 1;
+        $qagnt_rules_not_end_argument[$row[0]]["end_argument"] = 0;
+        $qagnt_rules_not_end_argument[$row[0]]["num_premises"] = 0;
+        $qagnt_rules_not_end_argument[$row[0]]["premises"] = array();
         $sql="select CASE 
             WHEN isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
             ELSE concat(p.name,'(',c.name,')') END predicate,
@@ -612,71 +627,74 @@ if ($result) {
         $premise='';
         $count=0;
         while($innerrow = mysqli_fetch_array($return)) {
-            $my_rules_not_end_argument[$row[0]]["premises"][count]["logic_display"]=$innerrow[0];
-            $my_rules_not_end_argument[$row[0]]["premises"][count]["predicate"]=$innerrow[1];
-            $my_rules_not_end_argument[$row[0]]["premises"][count]["constant"]=$innerrow[2];
-            $my_rules_not_end_argument[$row[0]]["premises"][count]["is_negated"]=$innerrow[3];
+            $qagnt_rules_not_end_argument[$row[0]]["premises"][count]["logic_display"]=$innerrow[0];
+            $qagnt_rules_not_end_argument[$row[0]]["premises"][count]["predicate"]=$innerrow[1];
+            $qagnt_rules_not_end_argument[$row[0]]["premises"][count]["constant"]=$innerrow[2];
+            $qagnt_rules_not_end_argument[$row[0]]["premises"][count]["is_negated"]=$innerrow[3];
               if($count > 0){ $premise .= ", "; }
               $premise .= $innerrow[0];
               $count++;
         }
         mysqli_free_result($return);
-        $my_rules_not_end_argument[$row[0]]["num_premises"] = $count;
-        $my_rules_not_end_argument[$row[0]]["premises_display"] = $premise;
-        $my_rules_not_end_argument[$row[0]]["rule_display"] = $row[1]." :- ".$premise;
-        $my_rules[$row[0]] = & $my_rules_not_end_argument[$row[0]];
-        $my_beliefs[$row[0]] = & $my_rules_not_end_argument[$row[0]];
+        $qagnt_rules_not_end_argument[$row[0]]["num_premises"] = $count;
+        $qagnt_rules_not_end_argument[$row[0]]["premises_display"] = $premise;
+        $qagnt_rules_not_end_argument[$row[0]]["rule_display"] = $row[1]." :- ".$premise;
+        $qagnt_rules[$row[0]] = & $qagnt_rules_not_end_argument[$row[0]];
+        $qagnt_beliefs[$row[0]] = & $qagnt_rules_not_end_argument[$row[0]];
         if ($debug) {
-            printf("//my_rules_not_end_argument[%s]:, inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s\n",
+            printf("//qagnt_rules_not_end_argument[%s]:, inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s\n",
                    $row[0],
-                   $my_rules_not_end_argument[$row[0]]["is_negated"],
-                   $my_rules_not_end_argument[$row[0]]["predicate"],
-                   $my_rules_not_end_argument[$row[0]]["constant"],
-                   $my_rules_not_end_argument[$row[0]]["num_premises"],
-                   $my_rules_not_end_argument[$row[0]]["rule_display"],
-                   $my_rules_not_end_argument[$row[0]]["is_rule"],
-                   $my_rules_not_end_argument[$row[0]]["end_argument"],
-                   $my_rules_not_end_argument[$row[0]]["level"]);
-            printf("//my_rules[%s]:, inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s\n",
+                   $qagnt_rules_not_end_argument[$row[0]]["is_negated"],
+                   $qagnt_rules_not_end_argument[$row[0]]["predicate"],
+                   $qagnt_rules_not_end_argument[$row[0]]["constant"],
+                   $qagnt_rules_not_end_argument[$row[0]]["num_premises"],
+                   $qagnt_rules_not_end_argument[$row[0]]["rule_display"],
+                   $qagnt_rules_not_end_argument[$row[0]]["is_rule"],
+                   $qagnt_rules_not_end_argument[$row[0]]["end_argument"],
+                   $qagnt_rules_not_end_argument[$row[0]]["level"]);
+            printf("//qagnt_rules[%s]:, inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s\n",
                    $row[0],
-                   $my_rules[$row[0]]["is_negated"],
-                   $my_rules[$row[0]]["predicate"],
-                   $my_rules[$row[0]]["constant"],
-                   $my_rules[$row[0]]["num_premises"],
-                   $my_rules[$row[0]]["rule_display"],
-                   $my_rules[$row[0]]["is_rule"],
-                   $my_rules[$row[0]]["end_argument"],
-                   $my_rules[$row[0]]["level"]);
-            printf("//my_beliefs[%s]:, inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s\n",
+                   $qagnt_rules[$row[0]]["is_negated"],
+                   $qagnt_rules[$row[0]]["predicate"],
+                   $qagnt_rules[$row[0]]["constant"],
+                   $qagnt_rules[$row[0]]["num_premises"],
+                   $qagnt_rules[$row[0]]["rule_display"],
+                   $qagnt_rules[$row[0]]["is_rule"],
+                   $qagnt_rules[$row[0]]["end_argument"],
+                   $qagnt_rules[$row[0]]["level"]);
+            printf("//qagnt_beliefs[%s]:, inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s\n",
                    $row[0],
-                   $my_beliefs[$row[0]]["is_negated"],
-                   $my_beliefs[$row[0]]["predicate"],
-                   $my_beliefs[$row[0]]["constant"],
-                   $my_beliefs[$row[0]]["num_premises"],
-                   $my_beliefs[$row[0]]["rule_display"],
-                   $my_beliefs[$row[0]]["is_rule"],
-                   $my_beliefs[$row[0]]["end_argument"],
-                   $my_beliefs[$row[0]]["level"]);
+                   $qagnt_beliefs[$row[0]]["is_negated"],
+                   $qagnt_beliefs[$row[0]]["predicate"],
+                   $qagnt_beliefs[$row[0]]["constant"],
+                   $qagnt_beliefs[$row[0]]["num_premises"],
+                   $qagnt_beliefs[$row[0]]["rule_display"],
+                   $qagnt_beliefs[$row[0]]["is_rule"],
+                   $qagnt_beliefs[$row[0]]["end_argument"],
+                   $qagnt_beliefs[$row[0]]["level"]);
         }
-        $num_my_rules_not_end_argument++;
-        $num_my_rules++;
-        $num_my_beliefs++;
+        $num_qagnt_rules_not_end_argument++;
+        $num_qagnt_rules++;
+        $num_qagnt_beliefs++;
     }
 }
 mysqli_free_result($result);
 if ($debug) {
-    printf("//num_my_rules_not_end_argument=%d or %d\n",
-           $num_my_rules_not_end_argument, count($my_rules_not_end_argument));
-    printf("//num_my_rules=%d or %d\n", $num_my_rules, count($my_rules));
-    printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
+    printf("//num_qagnt_rules_not_end_argument=%d or %d\n",
+           $num_qagnt_rules_not_end_argument,
+           count($qagnt_rules_not_end_argument));
+    printf("//num_qagnt_rules=%d or %d\n", $num_qagnt_rules,
+           count($qagnt_rules));
+    printf("//num_qagnt_beliefs=%d or %d\n", $num_qagnt_beliefs,
+           count($qagnt_beliefs));
 }
 
 /** @page datagen_db_impl
  *
- * * Create rules data structure for agentID=1 (usually 'Me') that are argument
- * conclusions , i.e., ends of arguments.  Fill in $my_rules_end_argument and
- * $num_my_rules_end_argument as well as add to $my_rules,
- * $my_beliefs, $num_my_rules, and $num_my_beliefs.
+ * * Create rules data structure for agentID posing question that are argument
+ * conclusions , i.e., ends of arguments.  Fill in $qagnt_rules_end_argument
+ * and $num_qagnt_rules_end_argument as well as add to $qagnt_rules,
+ * $qagnt_beliefs, $num_qagnt_rules, and $num_qagnt_beliefs.
  */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
@@ -691,26 +709,26 @@ $sql="select distinct b.beliefID, CASE
         inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
         inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
         inner join parent_argument pa on pa.argumentID = a.argumentID and pa.sessionID = a.sessionID and pa.timestep = a.timestep 
-        where ab.agentID = 1 and b.isRule = 1 and a.isSupported = 1
+        where ab.agentID = q.agentID and b.isRule = 1 and a.isSupported = 1
         and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
         group by b.beliefID, b.isNegated, p.name, c.name, ab.level";
 $result=mysqli_query($link,$sql);
 if ($result) {
     while ($row = mysqli_fetch_array($result)) {
-        $my_rules_end_argument[$row[0]] = array();
-        $my_rules_end_argument[$row[0]]["inference_dot_label"] = "inference".$row[0];
-        $my_rules_end_argument[$row[0]]["rule_dot_label"] = "rule".$row[0];
-        $my_rules_end_argument[$row[0]]["inference_display"] = $row[1];
-        $my_rules_end_argument[$row[0]]["level"] = $row[2];
-        $my_rules_end_argument[$row[0]]["statuses"] = array($row[3]);
-        $my_rules_end_argument[$row[0]]["num_statuses"] = $row[4];
-        $my_rules_end_argument[$row[0]]["predicate"] = $row[5];
-        $my_rules_end_argument[$row[0]]["constant"] = $row[6];
-        $my_rules_end_argument[$row[0]]["is_negated"] = $row[7];
-        $my_rules_end_argument[$row[0]]["is_rule"] = 1;
-        $my_rules_end_argument[$row[0]]["end_argument"] = 1;
-        $my_rules_end_argument[$row[0]]["num_premises"] = 0;
-        $my_rules_end_argument[$row[0]]["premises"] = array();
+        $qagnt_rules_end_argument[$row[0]] = array();
+        $qagnt_rules_end_argument[$row[0]]["inference_dot_label"] = "inference".$row[0];
+        $qagnt_rules_end_argument[$row[0]]["rule_dot_label"] = "rule".$row[0];
+        $qagnt_rules_end_argument[$row[0]]["inference_display"] = $row[1];
+        $qagnt_rules_end_argument[$row[0]]["level"] = $row[2];
+        $qagnt_rules_end_argument[$row[0]]["statuses"] = array($row[3]);
+        $qagnt_rules_end_argument[$row[0]]["num_statuses"] = $row[4];
+        $qagnt_rules_end_argument[$row[0]]["predicate"] = $row[5];
+        $qagnt_rules_end_argument[$row[0]]["constant"] = $row[6];
+        $qagnt_rules_end_argument[$row[0]]["is_negated"] = $row[7];
+        $qagnt_rules_end_argument[$row[0]]["is_rule"] = 1;
+        $qagnt_rules_end_argument[$row[0]]["end_argument"] = 1;
+        $qagnt_rules_end_argument[$row[0]]["num_premises"] = 0;
+        $qagnt_rules_end_argument[$row[0]]["premises"] = array();
         $sql="select CASE 
               WHEN isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
               ELSE concat(p.name,'(',c.name,')') END predicate,
@@ -724,18 +742,18 @@ if ($result) {
         $premise='';
         $count=0;
         while($innerrow = mysqli_fetch_array($return)) {
-            $my_rules_end_argument[$row[0]]["premises"][count]["logic_display"]=$innerrow[0];
-            $my_rules_end_argument[$row[0]]["premises"][count]["predicate"]=$innerrow[1];
-            $my_rules_end_argument[$row[0]]["premises"][count]["constant"]=$innerrow[2];
-            $my_rules_end_argument[$row[0]]["premises"][count]["is_negated"]=$innerrow[3];
+            $qagnt_rules_end_argument[$row[0]]["premises"][count]["logic_display"]=$innerrow[0];
+            $qagnt_rules_end_argument[$row[0]]["premises"][count]["predicate"]=$innerrow[1];
+            $qagnt_rules_end_argument[$row[0]]["premises"][count]["constant"]=$innerrow[2];
+            $qagnt_rules_end_argument[$row[0]]["premises"][count]["is_negated"]=$innerrow[3];
             if($count > 0){ $premise .= ", ";}
             $premise .= $innerrow[0];    
             $count++;
         }
         mysqli_free_result($return);
-        $my_rules_end_argument[$row[0]]["num_premises"] = $count;
-        $my_rules_end_argument[$row[0]]["premises_display"] = $premise;
-        $my_rules_end_argument[$row[0]]["rule_display"] = $row[1]." :- ".$premise;
+        $qagnt_rules_end_argument[$row[0]]["num_premises"] = $count;
+        $qagnt_rules_end_argument[$row[0]]["premises_display"] = $premise;
+        $qagnt_rules_end_argument[$row[0]]["rule_display"] = $row[1]." :- ".$premise;
           
         if($row[4] > 1) {
             $count = 0;
@@ -746,66 +764,68 @@ if ($result) {
                     where pa.sessionID = '".$sessionID."' and pa.timestep = ".$timestep." and b.beliefID = ".$row[0];
             $result2=mysqli_query($link,$sql);
             if ($result2) {
-                $my_rules_end_argument[$row[0]]["statuses"] = array();
+                $qagnt_rules_end_argument[$row[0]]["statuses"] = array();
                 while ($row2 = mysqli_fetch_array($result2)) {
-                    $my_rules_end_argument[$row[0]]["statuses"][$count] = $row2[0];
+                    $qagnt_rules_end_argument[$row[0]]["statuses"][$count] = $row2[0];
                     $count=$count+1;
                 }
-                $my_rules_end_argument[$row[0]]["num_statuses"] = $count;
+                $qagnt_rules_end_argument[$row[0]]["num_statuses"] = $count;
             }
             mysqli_free_result($result2);
         }
-        $my_rules[$row[0]] = & $my_rules_end_argument[$row[0]];
-        $my_beliefs[$row[0]] = & $my_rules_end_argument[$row[0]];
+        $qagnt_rules[$row[0]] = & $qagnt_rules_end_argument[$row[0]];
+        $qagnt_beliefs[$row[0]] = & $qagnt_rules_end_argument[$row[0]];
         if ($debug) {
-            printf("//my_rules_end_argument[%s]: inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s, num_statuses=%d, statuses=(%s)\n",
+            printf("//qagnt_rules_end_argument[%s]: inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s, num_statuses=%d, statuses=(%s)\n",
                    $row[0],
-                   $my_rules_end_argument[$row[0]]["is_negated"],
-                   $my_rules_end_argument[$row[0]]["predicate"],
-                   $my_rules_end_argument[$row[0]]["constant"],
-                   $my_rules_end_argument[$row[0]]["num_premises"],
-                   $my_rules_end_argument[$row[0]]["rule_display"],
-                   $my_rules_end_argument[$row[0]]["is_rule"],
-                   $my_rules_end_argument[$row[0]]["end_argument"],
-                   $my_rules_end_argument[$row[0]]["level"],
-                   $my_rules_end_argument[$row[0]]["num_statuses"],
-                   implode(", ", $my_rules_end_argument[$row[0]]["statuses"]));
-            printf("//my_rules[%s]: inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s, num_statuses=%d, statuses=(%s)\n",
+                   $qagnt_rules_end_argument[$row[0]]["is_negated"],
+                   $qagnt_rules_end_argument[$row[0]]["predicate"],
+                   $qagnt_rules_end_argument[$row[0]]["constant"],
+                   $qagnt_rules_end_argument[$row[0]]["num_premises"],
+                   $qagnt_rules_end_argument[$row[0]]["rule_display"],
+                   $qagnt_rules_end_argument[$row[0]]["is_rule"],
+                   $qagnt_rules_end_argument[$row[0]]["end_argument"],
+                   $qagnt_rules_end_argument[$row[0]]["level"],
+                   $qagnt_rules_end_argument[$row[0]]["num_statuses"],
+                   implode(", ", $qagnt_rules_end_argument[$row[0]]["statuses"]));
+            printf("//qagnt_rules[%s]: inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s, num_statuses=%d, statuses=(%s)\n",
                    $row[0],
-                   $my_rules[$row[0]]["is_negated"],
-                   $my_rules[$row[0]]["predicate"],
-                   $my_rules[$row[0]]["constant"],
-                   $my_rules[$row[0]]["num_premises"],
-                   $my_rules[$row[0]]["rule_display"],
-                   $my_rules[$row[0]]["is_rule"],
-                   $my_rules[$row[0]]["end_argument"],
-                   $my_rules[$row[0]]["level"],
-                   $my_rules[$row[0]]["num_statuses"],
-                   implode(", ", $my_rules[$row[0]]["statuses"]));
-            printf("//my_beliefs[%s]: inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s, num_statuses=%d, statuses=(%s)\n",
+                   $qagnt_rules[$row[0]]["is_negated"],
+                   $qagnt_rules[$row[0]]["predicate"],
+                   $qagnt_rules[$row[0]]["constant"],
+                   $qagnt_rules[$row[0]]["num_premises"],
+                   $qagnt_rules[$row[0]]["rule_display"],
+                   $qagnt_rules[$row[0]]["is_rule"],
+                   $qagnt_rules[$row[0]]["end_argument"],
+                   $qagnt_rules[$row[0]]["level"],
+                   $qagnt_rules[$row[0]]["num_statuses"],
+                   implode(", ", $qagnt_rules[$row[0]]["statuses"]));
+            printf("//qagnt_beliefs[%s]: inference(is_negated=%s, pred=%s, const=%s), num_premises=%d, rule_display='%s', is_rule=%d, end_argument=%d, level=%s, num_statuses=%d, statuses=(%s)\n",
                    $row[0],
-                   $my_beliefs[$row[0]]["is_negated"],
-                   $my_beliefs[$row[0]]["predicate"],
-                   $my_beliefs[$row[0]]["constant"],
-                   $my_beliefs[$row[0]]["num_premises"],
-                   $my_beliefs[$row[0]]["rule_display"],
-                   $my_beliefs[$row[0]]["is_rule"],
-                   $my_beliefs[$row[0]]["end_argument"],
-                   $my_beliefs[$row[0]]["level"],
-                   $my_beliefs[$row[0]]["num_statuses"],
-                   implode(", ", $my_beliefs[$row[0]]["statuses"]));
+                   $qagnt_beliefs[$row[0]]["is_negated"],
+                   $qagnt_beliefs[$row[0]]["predicate"],
+                   $qagnt_beliefs[$row[0]]["constant"],
+                   $qagnt_beliefs[$row[0]]["num_premises"],
+                   $qagnt_beliefs[$row[0]]["rule_display"],
+                   $qagnt_beliefs[$row[0]]["is_rule"],
+                   $qagnt_beliefs[$row[0]]["end_argument"],
+                   $qagnt_beliefs[$row[0]]["level"],
+                   $qagnt_beliefs[$row[0]]["num_statuses"],
+                   implode(", ", $qagnt_beliefs[$row[0]]["statuses"]));
         }
-        $num_my_rules_end_argument++;
-        $num_my_rules++;
-        $num_my_beliefs++;
+        $num_qagnt_rules_end_argument++;
+        $num_qagnt_rules++;
+        $num_qagnt_beliefs++;
     }
 }
 mysqli_free_result($result);
 if ($debug) {
-    printf("//num_my_rules_end_argument=%d or %d\n",
-           $num_my_rules_end_argument, count($my_rules_end_argument));
-    printf("//num_my_rules=%d or %d\n", $num_my_rules, count($my_rules));
-    printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
+    printf("//num_qagnt_rules_end_argument=%d or %d\n",
+           $num_qagnt_rules_end_argument, count($qagnt_rules_end_argument));
+    printf("//num_qagnt_rules=%d or %d\n", $num_qagnt_rules,
+           count($qagnt_rules));
+    printf("//num_qagnt_beliefs=%d or %d\n", $num_qagnt_beliefs,
+           count($qagnt_beliefs));
 }
 
 /** @page datagen_db_impl
@@ -837,8 +857,8 @@ if ($result) {
         $belief_arrows[$from_to]["from_id"] = $row[3];
         $belief_arrows[$from_to]["to_id"] = $row[4];
         if ($row[2] == 0) {
-            if (array_key_exists($row[3], $my_facts)) {
-                $belief_arrows[$from_to]["from_ref"] = & $my_facts[$row[3]];
+            if (array_key_exists($row[3], $qagnt_facts)) {
+                $belief_arrows[$from_to]["from_ref"] = & $qagnt_facts[$row[3]];
             }
             else
             {
@@ -846,8 +866,8 @@ if ($result) {
                 // TODO: else exit??
             }
         } else {
-            if (array_key_exists($row[3], $my_rules)) {
-                $belief_arrows[$from_to]["from_ref"] = & $my_rules[$row[3]];
+            if (array_key_exists($row[3], $qagnt_rules)) {
+                $belief_arrows[$from_to]["from_ref"] = & $qagnt_rules[$row[3]];
             }
             else
             {
@@ -855,8 +875,8 @@ if ($result) {
                 // TODO: else exit??
             }
         }
-        if (array_key_exists($row[4], $my_rules)) {
-            $belief_arrows[$from_to]["to_ref"] = & $my_rules[$row[4]];
+        if (array_key_exists($row[4], $qagnt_rules)) {
+            $belief_arrows[$from_to]["to_ref"] = & $qagnt_rules[$row[4]];
         }
         else
         {
@@ -935,24 +955,24 @@ if ($result) {
         $attack_arrows[$from_to]["to_rule"] = $row[6];    
         $attack_arrows[$from_to]["to_id"] = $row[7];    
         if ($row[4] == 1) {
-            if (array_key_exists($row[5], $my_rules)) {
-                $attack_arrows[$from_to]["from_ref"] = & $my_rules[$row[5]];
+            if (array_key_exists($row[5], $qagnt_rules)) {
+                $attack_arrows[$from_to]["from_ref"] = & $qagnt_rules[$row[5]];
             }
             // TODO: else exit???
         } else {
-            if (array_key_exists($row[5], $my_facts)) {
-                $attack_arrows[$from_to]["from_ref"] = & $my_facts[$row[5]];
+            if (array_key_exists($row[5], $qagnt_facts)) {
+                $attack_arrows[$from_to]["from_ref"] = & $qagnt_facts[$row[5]];
             }
             // TODO: else exit???
         }
         if ($row[6] == 1) {
-            if (array_key_exists($row[7], $my_rules)) {
-                $attack_arrows[$from_to]["to_ref"] = & $my_rules[$row[7]];
+            if (array_key_exists($row[7], $qagnt_rules)) {
+                $attack_arrows[$from_to]["to_ref"] = & $qagnt_rules[$row[7]];
             }
             // TODO: else exit???
         } else {
-            if (array_key_exists($row[7], $my_facts)) {
-                $attack_arrows[$from_to]["to_ref"] = & $my_facts[$row[7]];
+            if (array_key_exists($row[7], $qagnt_facts)) {
+                $attack_arrows[$from_to]["to_ref"] = & $qagnt_facts[$row[7]];
             }
             // TODO: else exit???
         }
@@ -1072,15 +1092,15 @@ if ($result) {
             printf("//ERROR: cannot find agent %s\n", $row[2]);
             // TODO: else exit???
         }
-        // TODO: just use my_beliefs
+        // TODO: just use qagnt_beliefs
         if ($row[3] == 1) {
-            if (array_key_exists($row[4], $my_rules)) {
-                $agent_belief_arrows[$from_to]["to_ref"] = & $my_rules[$row[4]];    
+            if (array_key_exists($row[4], $qagnt_rules)) {
+                $agent_belief_arrows[$from_to]["to_ref"] = & $qagnt_rules[$row[4]];    
             }
             // TODO: else exit???
         } else {
-            if (array_key_exists($row[4], $my_facts)) {
-                $agent_belief_arrows[$from_to]["to_ref"] = & $my_facts[$row[4]];    
+            if (array_key_exists($row[4], $qagnt_facts)) {
+                $agent_belief_arrows[$from_to]["to_ref"] = & $qagnt_facts[$row[4]];    
             }
             // TODO: else exit???
         }
@@ -1215,7 +1235,7 @@ if ($debug) {
  * @brief array $store: associative array that stores all the variables that
  *         need to be exported to dotgen files. 
  *
- * $store stores all variables like $agents, $num_agents, $my_beliefs, etc.
+ * $store stores all variables like $agents, $num_agents, $qagnt_beliefs, etc.
  * that need to be accessed by other dotgen files. The array $store is
  * serialized and then stored as a string in a local file
  * "graphs2/".$sessionID.".vars". In header.php, the string is read from the
@@ -1223,20 +1243,23 @@ if ($debug) {
  * structures within $store are available for use in dotgen files.
  */
 $store = array ();
-$store["agents"] = & $agents; $store["num_agents"] = $num_agents;
-$store["my_beliefs"] = & $my_beliefs;
-$store["num_my_beliefs"] = $num_my_beliefs;
-$store["my_facts"] = & $my_facts; $store["num_my_facts"] = $num_my_facts;
-$store["my_rules"] = & $my_rules; $store["num_my_rules"] = $num_my_rules;
-$store["my_facts_not_end_argument"] = & $my_facts_not_end_argument;
-$store["num_my_facts_not_end_argument"] = $num_my_facts_not_end_argument;
-$store["my_facts_end_argument"] = & $my_facts_end_argument;
-$store["num_my_facts_end_argument"] = $num_my_facts_end_argument;
-$store["agents_assoc_my_facts"] = $agents_assoc_my_facts;
-$store["my_rules_not_end_argument"] = & $my_rules_not_end_argument;
-$store["num_my_rules_not_end_argument"] = $num_my_rules_not_end_argument;
-$store["my_rules_end_argument"] = & $my_rules_end_argument;
-$store["num_my_rules_end_argument"] = $num_my_rules_end_argument;
+$store["agents"] = & $agents;
+$store["num_agents"] = $num_agents;
+$store["qagnt_beliefs"] = & $qagnt_beliefs;
+$store["num_qagnt_beliefs"] = $num_qagnt_beliefs;
+$store["qagnt_facts"] = & $qagnt_facts;
+$store["num_qagnt_facts"] = $num_qagnt_facts;
+$store["qagnt_rules"] = & $qagnt_rules;
+$store["num_qagnt_rules"] = $num_qagnt_rules;
+$store["qagnt_facts_not_end_argument"] = & $qagnt_facts_not_end_argument;
+$store["num_qagnt_facts_not_end_argument"] = $num_qagnt_facts_not_end_argument;
+$store["qagnt_facts_end_argument"] = & $qagnt_facts_end_argument;
+$store["num_qagnt_facts_end_argument"] = $num_qagnt_facts_end_argument;
+$store["agents_assoc_qagnt_facts"] = $agents_assoc_qagnt_facts;
+$store["qagnt_rules_not_end_argument"] = & $qagnt_rules_not_end_argument;
+$store["num_qagnt_rules_not_end_argument"] = $num_qagnt_rules_not_end_argument;
+$store["qagnt_rules_end_argument"] = & $qagnt_rules_end_argument;
+$store["num_qagnt_rules_end_argument"] = $num_qagnt_rules_end_argument;
 $store["belief_arrows"] = & $belief_arrows;
 $store["num_belief_arrows"] = $num_belief_arrows;
 $store["belief_arrows_from"] = & $belief_arrows_from;

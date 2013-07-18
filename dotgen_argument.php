@@ -19,9 +19,9 @@ digraph g {
  * selected argument within the "Outcomes" radio elements.
  *
  * Generates dot file highlighting all the elements in the user selected
- * outcome (or argument) starting from "Me" using data structures defined in
- * file datagen_db.php. Those elements not fully contained in the selected
- * outcome/argument are greyed out.
+ * outcome (or argument) starting from agent posing question using data
+ * structures defined in file datagen_db.php. Those elements not fully
+ * contained in the selected outcome/argument are greyed out.
  */
 
 
@@ -41,10 +41,10 @@ $not_arg_agentIDs = array_diff($agentIDs, $arg_agentIDs);
  *
  * * Find belief IDs that are part of this argument ($arg_beliefIDs) and
  * those that are not part of this argument ($not_arg_beliefIDs). Use
- * $arguments[$argumentID]["beliefIDs"] and $my_beliefs.
+ * $arguments[$argumentID]["beliefIDs"] and $qagnt_beliefs.
  */
 $arg_beliefIDs = $arguments[$argumentID]["beliefIDs"];
-$beliefIDs = array_keys($my_beliefs);
+$beliefIDs = array_keys($qagnt_beliefs);
 $not_arg_beliefIDs = array_diff($beliefIDs, $arg_beliefIDs);
 //printf("//arg_beliefIDs = (%s), not_arg_beliefIDs = (%s)\n",
 //       implode(", ", $arg_beliefIDs), implode(", ", $not_arg_beliefIDs));
@@ -69,12 +69,12 @@ foreach ($arg_agentIDs as $id) {
  * this argument ($argumentID)
  */
 foreach ($arg_beliefIDs as $id) {
-    if (($my_beliefs[$id]["is_rule"] == 0) &&
-        ($my_beliefs[$id]["end_argument"] == 0)) {
+    if (($qagnt_beliefs[$id]["is_rule"] == 0) &&
+        ($qagnt_beliefs[$id]["end_argument"] == 0)) {
         printf("%s [label=\"%s:%s\", shape=box, fontsize=35, fillcolor=lightcyan, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $my_beliefs[$id]["dot_label"],
-               $my_beliefs[$id]["logic_display"],
-               min($my_beliefs[$id]["levels"]));
+               $qagnt_beliefs[$id]["dot_label"],
+               $qagnt_beliefs[$id]["logic_display"],
+               min($qagnt_beliefs[$id]["levels"]));
     }
 }
 
@@ -84,9 +84,9 @@ foreach ($arg_beliefIDs as $id) {
  * this argument ($argumentID)
  */
 foreach ($arg_beliefIDs as $id) {
-    if (($my_beliefs[$id]["is_rule"] == 0) &&
-        ($my_beliefs[$id]["end_argument"] == 1)) {
-        $info = & $my_beliefs[$id];
+    if (($qagnt_beliefs[$id]["is_rule"] == 0) &&
+        ($qagnt_beliefs[$id]["end_argument"] == 1)) {
+        $info = & $qagnt_beliefs[$id];
         if (($info["num_statuses"] == 1) && ($info["statuses"][0] == "IN")) {
             printf("%s [label=\"%s:%s : %s\", fontsize=35,shape=box, fillcolor=palegreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
                    $info["dot_label"], $info["logic_display"],
@@ -115,17 +115,17 @@ foreach ($arg_beliefIDs as $id) {
  * argument ($argumentID)
  */
 foreach ($arg_beliefIDs as $id) {
-    if (($my_beliefs[$id]["is_rule"] == 1) &&
-        ($my_beliefs[$id]["end_argument"] == 0)) {
+    if (($qagnt_beliefs[$id]["is_rule"] == 1) &&
+        ($qagnt_beliefs[$id]["end_argument"] == 0)) {
         printf("%s [label=\"%s:%s\", shape=box3d, fontsize=35, fillcolor=lightblue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $my_beliefs[$id]["rule_dot_label"],
-               $my_beliefs[$id]["rule_display"], $my_beliefs[$id]["level"]);
+               $qagnt_beliefs[$id]["rule_dot_label"],
+               $qagnt_beliefs[$id]["rule_display"], $qagnt_beliefs[$id]["level"]);
         printf("%s [label=\"%s\", shape=box, fontsize=35, fillcolor=lightcyan, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $my_beliefs[$id]["inference_dot_label"],
-               $my_beliefs[$id]["inference_display"]);
+               $qagnt_beliefs[$id]["inference_dot_label"],
+               $qagnt_beliefs[$id]["inference_display"]);
         printf("%s -> %s [color=darkgreen, fontsize=35, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $my_beliefs[$id]["rule_dot_label"],
-               $my_beliefs[$id]["inference_dot_label"]);
+               $qagnt_beliefs[$id]["rule_dot_label"],
+               $qagnt_beliefs[$id]["inference_dot_label"]);
     }
 }
 
@@ -135,9 +135,9 @@ foreach ($arg_beliefIDs as $id) {
  * this argument ($argumentID)
  */
 foreach ($arg_beliefIDs as $id) {
-    if (($my_beliefs[$id]["is_rule"] == 1) &&
-        ($my_beliefs[$id]["end_argument"] == 1)) {
-        $info = & $my_beliefs[$id];
+    if (($qagnt_beliefs[$id]["is_rule"] == 1) &&
+        ($qagnt_beliefs[$id]["end_argument"] == 1)) {
+        $info = & $qagnt_beliefs[$id];
         printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=lightblue, fontsize=35, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
                $info["rule_dot_label"],
                $info["rule_display"], $info["level"]);
@@ -280,12 +280,12 @@ foreach ($not_arg_agentIDs as $id) {
  * this argument ($argumentID).
  */
 foreach ($not_arg_beliefIDs as $id) {
-    if (($my_beliefs[$id]["is_rule"] == 0) &&
-        ($my_beliefs[$id]["end_argument"] == 0)) {
+    if (($qagnt_beliefs[$id]["is_rule"] == 0) &&
+        ($qagnt_beliefs[$id]["end_argument"] == 0)) {
         printf("%s [label=\"%s:%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $my_beliefs[$id]["dot_label"],
-               $my_beliefs[$id]["logic_display"],
-               min($my_beliefs[$id]["levels"]));
+               $qagnt_beliefs[$id]["dot_label"],
+               $qagnt_beliefs[$id]["logic_display"],
+               min($qagnt_beliefs[$id]["levels"]));
     }
 }
 
@@ -295,9 +295,9 @@ foreach ($not_arg_beliefIDs as $id) {
  * this argument ($argumentID)
  */
 foreach ($not_arg_beliefIDs as $id) {
-    if (($my_beliefs[$id]["is_rule"] == 0) &&
-        ($my_beliefs[$id]["end_argument"] == 1)) {
-        $info = & $my_beliefs[$id];
+    if (($qagnt_beliefs[$id]["is_rule"] == 0) &&
+        ($qagnt_beliefs[$id]["end_argument"] == 1)) {
+        $info = & $qagnt_beliefs[$id];
         if (($info["num_statuses"] == 1) && ($info["statuses"][0] == "IN")) {
             printf("%s [label=\"%s:%s : %s\",shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
                    $info["dot_label"], $info["logic_display"],
@@ -326,17 +326,17 @@ foreach ($not_arg_beliefIDs as $id) {
  * this argument ($argumentID)
  */
 foreach ($not_arg_beliefIDs as $id) {
-    if (($my_beliefs[$id]["is_rule"] == 1) &&
-        ($my_beliefs[$id]["end_argument"] == 0)) {
+    if (($qagnt_beliefs[$id]["is_rule"] == 1) &&
+        ($qagnt_beliefs[$id]["end_argument"] == 0)) {
         printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $my_beliefs[$id]["rule_dot_label"],
-               $my_beliefs[$id]["rule_display"], $my_beliefs[$id]["level"]);
+               $qagnt_beliefs[$id]["rule_dot_label"],
+               $qagnt_beliefs[$id]["rule_display"], $qagnt_beliefs[$id]["level"]);
         printf("%s [label=\"%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $my_beliefs[$id]["inference_dot_label"],
-               $my_beliefs[$id]["inference_display"]);
+               $qagnt_beliefs[$id]["inference_dot_label"],
+               $qagnt_beliefs[$id]["inference_display"]);
         printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $my_beliefs[$id]["rule_dot_label"],
-               $my_beliefs[$id]["inference_dot_label"]);
+               $qagnt_beliefs[$id]["rule_dot_label"],
+               $qagnt_beliefs[$id]["inference_dot_label"]);
     }
 }
 
@@ -346,9 +346,9 @@ foreach ($not_arg_beliefIDs as $id) {
  * this argument ($argumentID)
  */
 foreach ($not_arg_beliefIDs as $id) {
-    if (($my_beliefs[$id]["is_rule"] == 1) &&
-        ($my_beliefs[$id]["end_argument"] == 1)) {
-        $info = & $my_beliefs[$id];
+    if (($qagnt_beliefs[$id]["is_rule"] == 1) &&
+        ($qagnt_beliefs[$id]["end_argument"] == 1)) {
+        $info = & $qagnt_beliefs[$id];
         printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
                $info["rule_dot_label"],
                $info["rule_display"], $info["level"]);

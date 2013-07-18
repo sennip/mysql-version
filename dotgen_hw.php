@@ -15,9 +15,9 @@ digraph g {
  * File that generates dot file containing the "Scenario Overview" with all
  * arguments (outcomes).
  *
- * Generates dot file containing the "Scenario Overview" starting from "Me"
- * with all generated arguments using data structures defined in file
- * datagen_db.php.
+ * Generates dot file containing the "Scenario Overview" starting from agent
+ * posing question with all relevant generated arguments using data structures
+ * defined in file datagen_db.php.
  */
 
 
@@ -32,20 +32,20 @@ foreach ($agents as $agent_id => $agent_info) {
 
 /** @page dotgen_hw_impl
  *
- * * Create fact nodes for agentID=1 (usually 'Me') that aren't ends of
+ * * Create fact nodes for agentID posing question that aren't ends of
  * arguments
  */
-foreach ($my_facts_not_end_argument as $id => $info) {
+foreach ($qagnt_facts_not_end_argument as $id => $info) {
     printf("%s [label=\"%s:%s\", shape=box, fillcolor=lightcyan, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["dot_label"], $info["logic_display"], min($info["levels"]));
 }
 
 /** @page dotgen_hw_impl
  *
- * * Create fact nodes for agentID=1 (usually 'Me') that are argument
+ * * Create fact nodes for agentID posing question that are argument
  * conclusions
  */
-foreach ($my_facts_end_argument as $id => $info) {
+foreach ($qagnt_facts_end_argument as $id => $info) {
     if ($info["num_statuses"] == 1) {
         if ($info["statuses"][0] == "IN") {
             printf("%s [label=\"%s:%s : %s\", shape=box, fillcolor=palegreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -70,9 +70,9 @@ foreach ($my_facts_end_argument as $id => $info) {
 
 /** @page dotgen_hw_impl
  *
- * * Create rule nodes for agentID=1 (usually 'Me') that aren't argument ends
+ * * Create rule nodes for agentID posing question that aren't argument ends
  */
-foreach ($my_rules_not_end_argument as $id=>$info) {
+foreach ($qagnt_rules_not_end_argument as $id=>$info) {
     printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=lightblue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["rule_dot_label"], $info["rule_display"], $info["level"]);
     printf("%s [label=\"%s\", shape=box, fillcolor=lightcyan, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -83,10 +83,10 @@ foreach ($my_rules_not_end_argument as $id=>$info) {
 
 /** @page dotgen_hw_impl
  *
- * * Create rule nodes for agentID=1 (usually 'Me') that are argument
+ * * Create rule nodes for agentID posing question that are argument
  * conclusions
  */
-foreach ($my_rules_end_argument as $id=>$info) {
+foreach ($qagnt_rules_end_argument as $id=>$info) {
     printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=lightblue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
              $info["rule_dot_label"], $info["rule_display"], $info["level"]);
     printf("%s -> %s [color=darkgreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
