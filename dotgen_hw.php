@@ -10,25 +10,41 @@ digraph g {
       fontname=arial];
     edge [color=blue];
 <?php
-/*
-* Create agents nodes
-*/
+/** @page dotgen_hw_impl Implementation Details: dotgen_hw.php
+ * dotgen_hw.php: 
+ * File that generates dot file containing the "Scenario Overview" with all
+ * arguments (outcomes).
+ *
+ * Generates dot file containing the "Scenario Overview" starting from "Me"
+ * with all generated arguments using data structures defined in file
+ * datagen_db.php.
+ */
+
+
+/** @page dotgen_hw_impl
+ *
+ * * Create agents nodes
+ */
 foreach ($agents as $agent_id => $agent_info) {
     printf("%s [label=%s, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $agent_info["dot_label"], $agent_info["name"]);
 }
 
-/*
-* Create fact nodes for agentID=1 (usually 'Me') that aren't ends of arguments
-*/
+/** @page dotgen_hw_impl
+ *
+ * * Create fact nodes for agentID=1 (usually 'Me') that aren't ends of
+ * arguments
+ */
 foreach ($my_facts_not_end_argument as $id => $info) {
     printf("%s [label=\"%s:%s\", shape=box, fillcolor=lightcyan, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["dot_label"], $info["logic_display"], min($info["levels"]));
 }
 
-/*
-* Create fact nodes for agentID=1 (usually 'Me') that are argument conclusions
-*/
+/** @page dotgen_hw_impl
+ *
+ * * Create fact nodes for agentID=1 (usually 'Me') that are argument
+ * conclusions
+ */
 foreach ($my_facts_end_argument as $id => $info) {
     if ($info["num_statuses"] == 1) {
         if ($info["statuses"][0] == "IN") {
@@ -52,9 +68,10 @@ foreach ($my_facts_end_argument as $id => $info) {
     }
 }
 
-/*
-* Create rule nodes for agentID=1 (usually 'Me') that aren't argument ends
-*/
+/** @page dotgen_hw_impl
+ *
+ * * Create rule nodes for agentID=1 (usually 'Me') that aren't argument ends
+ */
 foreach ($my_rules_not_end_argument as $id=>$info) {
     printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=lightblue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["rule_dot_label"], $info["rule_display"], $info["level"]);
@@ -64,9 +81,11 @@ foreach ($my_rules_not_end_argument as $id=>$info) {
            $info["rule_dot_label"], $info["inference_dot_label"]);
 }
 
-/*
-* Create rule nodes for agentID=1 (usually 'Me') that are argument conclusions
-*/
+/** @page dotgen_hw_impl
+ *
+ * * Create rule nodes for agentID=1 (usually 'Me') that are argument
+ * conclusions
+ */
 foreach ($my_rules_end_argument as $id=>$info) {
     printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=lightblue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
              $info["rule_dot_label"], $info["rule_display"], $info["level"]);
@@ -95,9 +114,10 @@ foreach ($my_rules_end_argument as $id=>$info) {
     }
 }
 
-/*
-* Create arrows between beliefs
-*/
+/** @page dotgen_hw_impl
+ *
+ * * Create arrows between beliefs
+ */
 foreach ($belief_arrows as $id=>$info) {
     // YUP: both if and else arrows are the same code but
     // $info["from_dot_label"] differ and potentially we can do sthg
@@ -111,25 +131,28 @@ foreach ($belief_arrows as $id=>$info) {
     }
 }
 
-/*
-* Create arrows for attacks (rebut and undermine)
-*/
+/** @page dotgen_hw_impl
+ *
+ * * Create arrows for attacks (rebut and undermine)
+ */
 foreach ($attack_arrows as $id=>$info) {
     printf("%s -> %s [label=%s color=orange, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"],$info["to_dot_label"],$info["attack_type"]);
 }
 
-/*
-* Create arrows between agents
-*/
+/** @page dotgen_hw_impl
+ *
+ * * Create arrows between agents
+ */
 foreach ($agent_arrows as $id=>$info) {
     printf("%s -> %s [color=yellow, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"], $info["to_dot_label"]);
 }
 
-/*
-* Create arrows between agents and their direct beliefs
-*/
+/** @page dotgen_hw_impl
+ *
+ * * Create arrows between agents and their direct beliefs
+ */
 foreach ($agent_belief_arrows as $id=>$info) {
     printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"], $info["to_dot_label"]);

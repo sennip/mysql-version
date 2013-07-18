@@ -9,6 +9,9 @@ if (!$link) {
 if(array_key_exists('xmlfile', $_GET)){
 	$graphType = 'default';
 	$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile']);
+	//echo "Session ID: (";
+	//echo $sessionID;
+	//echo ") END";
 	$timestep=1;
 
 	ob_start();

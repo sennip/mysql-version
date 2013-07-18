@@ -13,10 +13,28 @@ digraph g {
             graph [style="rounded,filled",
                 fillcolor=whitesmoke];
 <?php
+/** @page dotgen_inferred_impl Implementation Details: dotgen_inferred.php
+ * dotgen_inferred.php: 
+ * File that generates dot file highlighting all the premises, rule and
+ * inference of an inferred belief (also called rule) that the user selects 
+ * within the "Inferred Knowledge" radio elements.
+ *
+ * Generates dot file highlighting all the premises, rule and inference of an
+ * inferred belief/rule that the user selects of id $ruleID using data
+ * structures defined in file datagen_db.php. Those elements not part of the
+ * selected inferred belief/rule are greyed out.
+ */
 
-/*
-* Create rule node for $ruleID that can be argument ends or not
-*/
+/** @page dotgen_inferred_impl
+ *
+ * * Draw all premises, rule and inference of this $ruleID
+ */
+
+/** @page dotgen_inferred_impl
+ *
+ *  + Create rule node, inference node and arrow between them for $ruleID
+ * that can be an end of an argument or not
+ */
 $info = $my_rules[$ruleID];
 if ($info["end_argument"] == 0) {
     printf("%s [label=\"%s:%s\", shape=box3d,  fontsize=50, fillcolor=lightblue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -52,9 +70,14 @@ if ($info["end_argument"] == 0) {
     }
 }
 
-/*
-* Create premises of $ruleID and arrows between premises and $ruleID
-*/
+/** @page dotgen_inferred_impl
+ *
+ *  + Create premises of $ruleID (that can be facts or rules) and arrows
+ * between premises and $ruleID. Populate those facts that are part of the
+ * premises of this $ruleID in array $my_premises_facts_ruleID. Populate
+ * those rules that are part of the premises of this $ruleID in array
+ * $my_premises_rule_ruleID.
+ */
 // array of factIDs that are premises of ruleID
 $my_premises_facts_ruleID = array();
 // array of ruleIDs that are premises of ruleID
@@ -144,18 +167,27 @@ foreach ($belief_arrows_to[$ruleID] as $from_id=>$arrow_info) {
                 ?>
         }
 <?php
-/*
-* Create agents nodes
-*/
+
+/** @page dotgen_inferred_impl
+ *
+ * * Draw the rest of the elements (i.e., not associated with this $ruleID)
+ */
+
+/** @page dotgen_inferred_impl
+ *
+ *   + Create agents nodes
+ */
 foreach ($agents as $agent_id => $agent_info) {
     printf("%s [label=%s, href=\"javascript:void(0)\", fillcolor=grey, onclick=\"get_id('\L', '\N')\"];\n",
            $agent_info["dot_label"], $agent_info["name"]);
 }
 
 
-/*
-* Create fact nodes that aren't ends of arguments
-*/
+/** @page dotgen_inferred_impl
+ *
+ *  + Create fact nodes that aren't ends of arguments and that are not
+ * premises of $ruleID
+ */
 foreach ($my_facts_not_end_argument as $id => $info) {
     if (in_array($id, $my_premises_facts_ruleID) == FALSE) {
         printf("%s [label=\"%s:%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -164,9 +196,11 @@ foreach ($my_facts_not_end_argument as $id => $info) {
     }
 }
 
-/*
-* Create fact nodes that are argument conclusions
-*/
+/** @page dotgen_inferred_impl
+ *
+ *  + Create fact nodes that are argument conclusions and that are not
+ * premises of $ruleID
+ */
 foreach ($my_facts_end_argument as $id => $info) {
     if (in_array($id, $my_premises_facts_ruleID) == FALSE) {
         if ($info["num_statuses"] == 1) {
@@ -192,9 +226,11 @@ foreach ($my_facts_end_argument as $id => $info) {
     }
 }
 
-/*
-* Create rule nodes that aren't argument ends
-*/
+/** @page dotgen_inferred_impl
+ *
+ *  + Create rule nodes that aren't argument ends and that are not premises
+ * of $ruleID
+ */
 foreach ($my_rules_not_end_argument as $id=>$info) {
     if ($id != $ruleID) {
         printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -208,9 +244,11 @@ foreach ($my_rules_not_end_argument as $id=>$info) {
     }
 }
 
-/*
-* Create rule nodes that are argument conclusions
-*/
+/** @page dotgen_inferred_impl
+ *
+ *  + Create rule nodes that are argument conclusions and that are not
+ * premises of $ruleID
+ */
 foreach ($my_rules_end_argument as $id=>$info) {
     if ($id != $ruleID) {
         printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
@@ -243,9 +281,11 @@ foreach ($my_rules_end_argument as $id=>$info) {
     }
 }
 
-/*
-* Create arrows between beliefs
-*/
+/** @page dotgen_inferred_impl
+ *
+ *  + Create arrows between beliefs where the ending belief is not $ruleID
+ * (we have already drawn arrows from premises of $ruleID to $ruleID)
+ */
 foreach ($belief_arrows as $id=>$info) {
     // YUP: both if and else arrows are the same code but
     // $info["from_dot_label"] differ and potentially we can do sthg
@@ -261,25 +301,28 @@ foreach ($belief_arrows as $id=>$info) {
 	}
 }
 
-/*
-* Create arrows for attacks (rebut and undermine)
-*/
+/** @page dotgen_inferred_impl
+ *
+ *   + Create arrows for attacks (rebut and undermine)
+ */
 foreach ($attack_arrows as $id=>$info) {
     printf("%s -> %s [label=%s color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"],$info["to_dot_label"],$info["attack_type"]);
 }
 
-/*
-* Create arrows between agents
-*/
+/** @page dotgen_inferred_impl
+ *
+ *   + Create arrows between agents
+ */
 foreach ($agent_arrows as $id=>$info) {
     printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"], $info["to_dot_label"]);
 }
 
-/*
-* Create arrows between agents and their direct beliefs
-*/
+/** @page dotgen_inferred_impl
+ *
+ *   + Create arrows between agents and their direct beliefs
+ */
 foreach ($agent_belief_arrows as $id=>$info) {
     printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"], $info["to_dot_label"]);

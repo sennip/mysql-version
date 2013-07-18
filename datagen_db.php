@@ -293,9 +293,11 @@ $arguments = array ();
  */
 $num_arguments = 0;
 
-/*
- * Create agents data structure
+/** @page datagen_db_impl Implementation Details: datagen_db.php
+ *
+ * * Create agents data structure: Fill in $agents and $num_agents.
  */
+
 $sql="SELECT DISTINCT agentID, agentName FROM agents 
          INNER JOIN agent_trust on (trustingAgent = agentID or trustedAgent = agentID) 
          where sessionID = '".$sessionID."' and timestep=".$timestep;
@@ -310,14 +312,17 @@ if ($result) {
     }
 }
 mysqli_free_result($result);
-if ($debug) {
+if ($debug == 1) {
     printf("//num_agents=%d or %d\n", $num_agents, count($agents));
 }
 
-/*
-* Create facts data structure for agentID=1 (usually 'Me') that aren't ends of
-* arguments
-*/
+/** @page datagen_db_impl
+ *
+ * * Create facts data structure for agentID=1 (usually 'Me') that aren't
+ * ends of arguments.  Fill in $my_facts_not_end_argument and
+ * $num_my_facts_not_end_argument as well as partially build $my_facts,
+ * $my_beliefs, $num_my_facts, and $num_my_beliefs.
+ */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate, level,
@@ -404,10 +409,13 @@ if ($debug) {
     printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
 }
 
-/*
-* Create facts data structure for agentID=1 (usually 'Me') that are argument
-* conclusions
-*/
+/** @page datagen_db_impl
+ *
+ * * Create facts data structure for agentID=1 (usually 'Me') that are argument
+ * conclusions, i.e., ends of arguments.  Fill in $my_facts_end_argument and
+ * $num_my_facts_end_argument as well as add to $my_facts,
+ * $my_beliefs, $num_my_facts, and $num_my_beliefs.
+ */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate, ab.level, max(pa.status), count(distinct pa.status) as argStatus,
@@ -533,10 +541,13 @@ foreach ($my_facts as $id=>$info) {
     }
 }
 
-/*
-* Create rules data structure for agentID=1 (usually 'Me') that aren't
-* argument ends
-*/
+/** @page datagen_db_impl
+ *
+ * * Create rules data structure for agentID=1 (usually 'Me') that aren't
+ * argument ends. Fill in $my_rules_not_end_argument and
+ * $num_my_rules_not_end_argument as well as partially add to $my_rules,
+ * $my_beliefs, $num_my_rules, and $num_my_beliefs.
+ */
 $sql="select distinct b.beliefID, CASE 
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate, level,
@@ -644,10 +655,13 @@ if ($debug) {
     printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
 }
 
-/*
-* Create rules data structure for agentID=1 (usually 'Me') that are argument
-* conclusions
-*/
+/** @page datagen_db_impl
+ *
+ * * Create rules data structure for agentID=1 (usually 'Me') that are argument
+ * conclusions , i.e., ends of arguments.  Fill in $my_rules_end_argument and
+ * $num_my_rules_end_argument as well as add to $my_rules,
+ * $my_beliefs, $num_my_rules, and $num_my_beliefs.
+ */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate, ab.level,
@@ -778,9 +792,12 @@ if ($debug) {
     printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
 }
 
-/*
-* Create data structure for arrows between beliefs
-*/
+/** @page datagen_db_impl
+ *
+ * * Create data structure for arrows between beliefs: Fill in
+ * $belief_arrows, $num_belief_arrows, $belief_arrows_from,
+ * $num_belief_arrows_from, $belief_arrows_to, and $num_belief_arrows_to.
+ */
 $sql="select distinct case when b1.isRule = 1 then concat('inference',a.beliefID) else concat('fact',a.beliefID) end fromID, 
     case when b2.isRule = 1 then concat('rule',ab.beliefID) else concat('fact',ab.beliefID) end toID,
     b1.isRule, a.beliefID, ab.beliefID
@@ -868,9 +885,11 @@ if ($debug) {
            count($belief_arrows_to));
 }
 
-/*
-* Create data structure for arrows for attacks (rebut and undermine)
-*/
+/** @page datagen_db_impl
+ *
+ * * Create data structure for arrows that denote attacks (rebut and undermine)
+ * between beliefs. Fill in $attack_arrows and $num_attack_arrows.
+ */
 $sql="select distinct case when b.isRule = 1 then concat('inference',b.beliefID)
                   else concat('fact',b.beliefID) END fromID,
              case when b2.isRule = 1 then concat('inference',b2.beliefID)
@@ -938,9 +957,12 @@ if ($debug) {
            count($attack_arrows));
 }
 
-/*
-* Create data structure for arrows between agents
-*/
+/** @page datagen_db_impl
+ *
+ * * Create data structure for arrows between agents: Fillin $agent_arrows,
+ * $num_agent_arrows, $agent_arrows_from, $num_agent_arrows_from,
+ * $agent_arrows_to, and $num_agent_arrows_to.
+ */
 $sql="select concat('agent',trustingAgent), concat('agent',trustedAgent),
           trustingAgent, trustedAgent, level
           from agent_trust where sessionID = '".$sessionID."' and timestep=".$timestep;
@@ -1002,9 +1024,13 @@ if ($debug) {
            count($agent_arrows_to));
 }
 
-/*
-* Create data structure for arrows between agents and their direct beliefs
-*/
+/** @page datagen_db_impl
+ *
+ * * Create data structure for arrows between agents and their direct beliefs:
+ * Fill in $agent_belief_arrows, $num_agent_belief_arrows,
+ * $agent_belief_arrows_from, $num_agent_belief_arrows_from,
+ * $agent_belief_arrows_to, and $num_agent_belief_arrows_to.
+ */
 $sql="select distinct concat('agent',ab.agentID),
     case when isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
     ab.agentID, isRule, b.beliefID, ab.level
@@ -1083,10 +1109,12 @@ if ($debug) {
            $num_agent_belief_arrows_to, count($agent_belief_arrows_to));
 }
 
-/*
-* Create data structure for arguments.
-* Find agentIDs and beliefIDs for arguments
-*/
+/** @page datagen_db_impl
+ *
+ * * Create data structure for arguments.
+ * Find agentIDs and beliefIDs for arguments. Fill in $arguments and
+ * $num_arguments.
+ */
 $sql = "select pa.parentArgumentID, pa.level, pa.status, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate
@@ -1167,6 +1195,17 @@ if ($debug) {
     printf("//num_arguments=%d or %d\n", $num_arguments, count($arguments));
 }
 
+/** @var $store
+ * @brief array $store: associative array that stores all the variables that
+ *         need to be exported to dotgen files. 
+ *
+ * $store stores all variables like $agents, $num_agents, $my_beliefs, etc.
+ * that need to be accessed by other dotgen files. The array $store is
+ * serialized and then stored as a string in a local file
+ * graphs2/$sessionID.vars. In header.php, the string is read from the file
+ * and $store is obtained by unserializing the string. Thus the data
+ * structures within $store are available for use in dotgen files.
+ */
 $store = array ();
 $store["agents"] = & $agents; $store["num_agents"] = $num_agents;
 $store["my_beliefs"] = & $my_beliefs;
@@ -1203,13 +1242,6 @@ $store["num_agent_belief_arrows_from"] = $num_agent_belief_arrows_from;
 $store["agent_belief_arrows_to"] = & $agent_belief_arrows_to;
 $store["num_agent_belief_arrows_to"] = $num_agent_belief_arrows_to;
 $store["arguments"] = & $arguments; $store["num_arguments"] = $num_arguments;
-
-/*
-if ($debug) {
-    printf("//arguments keys: %s\n",
-          implode(", ", array_keys($store["arguments"])));
-}
-*/
 
 $fp = file_put_contents("graphs2/".$sessionID.".vars",  serialize($store));
 if ($fp == FALSE) {
