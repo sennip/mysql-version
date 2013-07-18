@@ -7,11 +7,11 @@
  */
 
 /** @brief int \$debug: Output debug information (=1) or not (=0) into file
-*          $sessionID.debug
+*          $sessionID".debug"
 */
 $debug = 1;
 
-/** @brief array $agents: array (with key=id_val) of scenario agent info.
+/** @brief array $agents: key=id_val contains array of scenario agent info.
  * 
  * $agents[id_val] = array("name"=>agent name string,
  *                         "dot_label"=>label string used in dot file)
@@ -19,11 +19,11 @@ $debug = 1;
 $agents = array ();
 /** @brief int \$num_agents: number of entries in $agents.
  *
- * Number of agents contained in scenario.
+ * Number of agents contained in scenario. NOTE: not used and can be removed.
  */
 $num_agents = 0;
 
-/** @brief array $my_beliefs: array (with key=id_val) of information contained
+/** @brief array $my_beliefs: key=id_val holds array of information contained
  *         in $my_facts and $my_rules.
  *
  * $my_beliefs[id_val] = reference to an entry either in $my_facts or $my_rules.
@@ -32,11 +32,11 @@ $my_beliefs = array ();
 /** @brief int \$num_my_beliefs: number of entries in $my_beliefs.
  *
  * Number of beliefs reachable by "Me" either directly or indirectly through
- * other agents.
+ * other agents. NOTE: not used and can be removed.
  */
 $num_my_beliefs = 0;
 
-/** @brief array $my_facts: store array (with key=id_val) of information
+/** @brief array $my_facts: key=id_val stores array of information
  *         contained in $my_facts_not_end_argument and $my_facts_end_argument.
  *
  * $my_facts[id_val] = reference to an entry either in
@@ -46,11 +46,11 @@ $my_facts = array ();
 /** @brief int \$num_my_facts: number of entries in $my_facts.
  *
  * Number of facts reachable by "Me" either directly or indirectly through
- * other agents.
+ * other agents. NOTE: not used and can be removed.
  */
 $num_my_facts = 0;
 
-/** @brief array $my_rules: array (with key=id_val) of information contained
+/** @brief array $my_rules: key=id_val stores array of information contained
  *         in $my_rules_not_end_argument and $my_rules_end_argument.
  *
  * $my_rules[id_val] = reference to an entry either in
@@ -60,11 +60,11 @@ $my_rules = array ();
 /** @brief int \$num_my_rules: number of entries in $my_rules.
  *
  * Number of rules reachable by "Me" either directly or indirectly through
- * other agents.
+ * other agents. NOTE: not used and can be removed.
  */
 $num_my_rules = 0;
 
-/** @brief array $my_facts_not_end_argument: array (with key=id_val) of facts
+/** @brief array $my_facts_not_end_argument: key=id_val contains array of facts
  *         reachable by "Me" that are not ends of arguments.
  *
  * $my_facts_not_end_argument[id_val] = array("predicate"=>string,
@@ -73,7 +73,7 @@ $num_my_rules = 0;
  *    "end_argument"=>0, "dot_label"=>string)
  *
  * NOTE: a fact can be reached by "Me" from many different paths through
- * different agents. Hence key "num_paths".
+ * different agents. Hence key "num_paths" and corr. number of "levels".
  *
  * TODO (potential bug): There could be a case when the direct or indirect
  * belief levels from "Me" are the same but the fact is reached from 2 or more
@@ -84,11 +84,12 @@ $my_facts_not_end_argument = array ();
  *         $my_facts_not_end_argument.
  *
  * Number of facts reachable by "Me" either directly or indirectly through
- * other agents that are not end of arguments.
+ * other agents that are not end of arguments. NOTE: not used and can be
+ * removed.
  */
 $num_my_facts_not_end_argument = 0;
 
-/** @brief array $my_facts_end_argument: array (with key=id_val) of facts
+/** @brief array $my_facts_end_argument: key=id_val contains array of facts
  *         reachable by "Me" that are ends of arguments.
  *
  * $my_facts_end_argument[id_val] = array ("predicate"=>string,
@@ -97,18 +98,18 @@ $num_my_facts_not_end_argument = 0;
  *    "num_paths"=>int, "levels"=>array(of size num_paths),
  *    "num_statuses"=>int, "statuses"=>array(string))
  *
- * NOTE: statuses[] can be 'IN', 'OUT', 'UNDEC'
+ * NOTE: statuses[i] can be 'IN', 'OUT', 'UNDEC'
  */
 $my_facts_end_argument = array ();
 /** @brief int \$num_my_facts_end_argument: number of entries in
  *         $my_facts_end_argument.
  *
  * Number of facts reachable by "Me" either directly or indirectly through
- * other agents that are end of arguments.
+ * other agents that are end of arguments. NOTE: not used and can be removed.
  */
 $num_my_facts_end_argument = 0;
 
-/** @brief array $agents_assoc_my_facts: array (with key=id_val) of agentID's
+/** @brief array $agents_assoc_my_facts: key=id_val stores array of agentID's
  *         that have this fact as part of their beliefs either directly or
  *         indirectly.
  *
@@ -116,7 +117,7 @@ $num_my_facts_end_argument = 0;
  */
 $agents_assoc_my_facts = array ();
 
-/** @brief array $my_rules_not_end_argument: array (with key=id_val) of rules
+/** @brief array $my_rules_not_end_argument: key=id_val contains array of rules
  *         reachable by "Me" that are not ends of arguments.
  *
  * $my_rules_not_end_argument[id_val] = array ("predicate"=>string,
@@ -126,17 +127,20 @@ $agents_assoc_my_facts = array ();
  *                      "is_negated"=>string, "logic_display"=>string),
  *    "premises_display"=>string, "rule_display"=>string,
  *    "inference_dot_label"=>string, "rule_dot_label"=>string)
+ *
+ * NOTE: inference is obtained by a rule that contains premises.
  */
 $my_rules_not_end_argument = array ();
 /** @brief int \$num_my_rules_not_end_argument: number of entries in
  *         $my_rules_not_end_argument.
  *
  * Number of rules reachable by "Me" either directly or indirectly through
- * other agents that are not end of arguments.
+ * other agents that are not end of arguments. NOTE: not used and can be
+ * removed.
  */
 $num_my_rules_not_end_argument = 0;
 
-/** @brief array $my_rules_end_argument: array (with key=id_val) of rules
+/** @brief array $my_rules_end_argument: key=id_val contains array of rules
  *        reachable by "Me" that are ends of arguments.
  *
  * $my_rules_end_argument[id_val] = array ("predicate"=>string,
@@ -148,18 +152,18 @@ $num_my_rules_not_end_argument = 0;
  *    "num_statuses"=>int, "statuses"=>array(string),
  *    "inference_dot_label"=>string, "rule_dot_label"=>string)
  *
- * NOTE: statuses[] can be 'IN', 'OUT', 'UNDEC'
+ * NOTE: statuses[i] can be 'IN', 'OUT', 'UNDEC'
  */
 $my_rules_end_argument = array ();
 /** @brief int \$num_my_rules_end_argument: number of entries in
  *         $my_rules_end_argument.
  *
  * Number of rules reachable by "Me" either directly or indirectly through
- * other agents that are end of arguments.
+ * other agents that are end of arguments. NOTE: not used and can be removed.
  */
 $num_my_rules_end_argument = 0;
 
-/** @brief array $belief_arrows: array (with key=fromID."_".toID) of arrow
+/** @brief array $belief_arrows: key=fromID."_".toID contains array of arrow
  *               information between beliefs.
  *
  * $belief_arrows[fromID_toID] = array("from_id"=>string,
@@ -169,33 +173,36 @@ $num_my_rules_end_argument = 0;
  */
 $belief_arrows = array();
 /** @brief int \$num_belief_arrows: number of entries in $belief_arrows.
+ *         NOTE: not used and can be removed.
  */
 $num_belief_arrows = 0;
-/** @brief array $belief_arrows_from: array (key=fromID) of belief arrows'
- *         information that emanate/start from belief ID (fromID).
+/** @brief array $belief_arrows_from: key=fromID contains array of belief
+ *         arrows' information that emanate/start from belief ID (fromID).
  *
  * $belief_arrows_from[fromID] = array(toID=>reference to
  *                                     $belief_arrows[fromID."_".toID])
  */
 $belief_arrows_from = array();
-/** @brief int \$num_belief_arrows: number of entries in $belief_arrows_from.
+/** @brief int \$num_belief_arrows_from: number of entries in
+ *         $belief_arrows_from. NOTE: not used and can be removed.
  */
 $num_belief_arrows_from = 0;
 /** 
- * @brief array $belief_arrows_to: array (key=toID) of belief arrows'
- *        information  that end at belief ID (toID).
+ * @brief array $belief_arrows_to: key=toID stores array of belief arrows'
+ *        information that end at belief ID (toID).
  *
  * $belief_arrows_to[toID] = array(fromID=>reference to
  *                                 $belief_arrows[fromID."_".toID])
  */
 $belief_arrows_to = array();
-/** @brief int \$num_belief_arrows: number of entries in $belief_arrows_to.
+/** @brief int \$num_belief_arrows_to: number of entries in $belief_arrows_to.
+ *         NOTE: not used and can be removed.
  */
 $num_belief_arrows_to = 0;
 
-/** @brief array $attack_arrows: array (with key fromID."_".toID) of arrow
+/** @brief array $attack_arrows: key=fromID."_".toID stores array of arrow
  *         information regarding belief with id fromID that rebuts or
- *          undermines the belief with id toID.
+ *         undermines the belief with id toID.
  *
  * $attack_arrows[fromID_toID] = array ("from_id"=>string,
  *    "from_dot_label"=>string, "from_rule"=>string (0 or 1 if rule),
@@ -206,58 +213,62 @@ $num_belief_arrows_to = 0;
  */
 $attack_arrows = array ();
 /** @brief int \$num_attack_arrows: number of entries in $attack_arrows.
+ *         NOTE: not used and can be removed.
  */
 $num_attack_arrows = 0;
 
-/** @brief array $agent_arrows: array (with key fromID."_".toID) of arrow
+/** @brief array $agent_arrows: key=fromID."_".toID stores array of arrow
  *         information regarding agents with fromID that directly trust
  *         agents with toID.
  *
  * $agent_arrows[fromID_toID] = array("from_id"=>string,
- *     "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID],
+ *     "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID]),
  *     "to_id"=>string, "to_dot_label"=>string, "to_ref"=>(reference to
  *     $agents[toID]), "level"=>string)
  */
 $agent_arrows = array();
-/** @brief int \$num_agent_arrows: number of entries in $agent_arrows
+/** @brief int \$num_agent_arrows: number of entries in $agent_arrows.
+ *         NOTE: not used and can be removed.
  */
 $num_agent_arrows = 0;
-/** @brief array $agent_arrows_from: array (key=fromID) of agent arrows'
+/** @brief array $agent_arrows_from: key=fromID stores array of agent arrows'
  *         information that emanate/start from agent ID (fromID).
  *
  * $agent_arrows_from[fromID] = array(toID=>reference to
  *                                    $agent_arrows[fromID."_".toID])
  */
 $agent_arrows_from = array();
-/** @brief int \$num_agent_arrows_from: number of entries in $agent_arrows_from
+/** @brief int \$num_agent_arrows_from: number of entries in
+ *         $agent_arrows_from. NOTE: not used and can be removed.
  */
 $num_agent_arrows_from = 0;
-/** @brief array $agent_arrows_to: array (key=toID) of agent arrows'
+/** @brief array $agent_arrows_to: key=toID stores array of agent arrows'
  *         information that end at agent ID (toID).
  *
  * $agent_arrows_to[toID] = array(fromID=>reference to
  *                                $agent_arrows[fromID."_".toID])
  */
 $agent_arrows_to = array();
-/** @brief int \$num_agent_arrows_to: number of entries in $agent_arrows_to
+/** @brief int \$num_agent_arrows_to: number of entries in $agent_arrows_to.
+ *         NOTE: not used and can be removed.
  */
 $num_agent_arrows_to = 0;
 
-/** @brief array $agent_belief_arrows: array (with key fromID."_".toID) of
+/** @brief array $agent_belief_arrows: key=fromID."_".toID stores array of
  *         arrow information connecting agent (with id fromID) to it's direct
  *         beliefs (with id toID).
  *
  * $agent_belief_arrows[fromID_toID] = array("from_id"=>string,
- *    "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID],
+ *    "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID]),
  *    "to_id"=>string, "to_dot_label"=>string, "to_rule"=>string(0 or 1),
  *    "to_ref"=>(reference to $my_beliefs[toID]), "level"=>string)
  */
 $agent_belief_arrows = array();
 /** @brief int \$num_agent_belief_arrows: number of entries in 
- *         $agent_belief_arrows
+ *         $agent_belief_arrows. NOTE: not used and can be removed.
  */
 $num_agent_belief_arrows = 0;
-/** @brief array $agent_belief_arrows_from: array (key=fromID) of agent to
+/** @brief array $agent_belief_arrows_from: key=fromID stores array of agent to
  *         belief arrows' information that start from agent ID (fromID).
  *
  * $agent_belief_arrows_from[fromID] = array(toID=>reference to
@@ -265,22 +276,22 @@ $num_agent_belief_arrows = 0;
  */
 $agent_belief_arrows_from = array();
 /** @brief int \$num_agent_belief_arrows_from: number of entries in 
- *         $agent_belief_arrows_from
+ *         $agent_belief_arrows_from. NOTE: not used and can be removed.
  */
 $num_agent_belief_arrows_from = 0;
-/** @brief array $agent_belief_arrows_to: array (key=toID) of agent to belief
- *         arrows' information that end at belief ID (toID)
+/** @brief array $agent_belief_arrows_to: key=toID stores array of agent to
+ *         belief arrows' information that end at belief ID (toID).
  *
  * $agent_belief_arrows_to[toID] = array(fromID=>reference to
  *                                     $agent_belief_arrows[fromID."_".toID])
  */
 $agent_belief_arrows_to = array();
 /** @brief int \$num_agent_belief_arrows_to: number of entries in 
- *         $agent_belief_arrows_to
+ *         $agent_belief_arrows_to. NOTE: not used and can be removed.
  */
 $num_agent_belief_arrows_to = 0;
 
-/** @brief array $arguments: array (with key argument_id) of argument
+/** @brief array $arguments: key=argument_id stores array of argument
  *         information.
  *
  * $arguments[id_val] = array("level"=>string, "status"=>string,
@@ -289,7 +300,8 @@ $num_agent_belief_arrows_to = 0;
  *     "num_beliefIDs"=>int, beliefIDs=>array(belief_ids))
  */
 $arguments = array ();
-/** @brief int \$num_arguments: number of entries in $arguments
+/** @brief int \$num_arguments: number of entries in $arguments. NOTE: not
+ *         used and can be removed.
  */
 $num_arguments = 0;
 
@@ -525,7 +537,11 @@ if ($debug) {
     printf("//num_my_beliefs=%d or %d\n", $num_my_beliefs, count($my_beliefs));
 }
 
-// Fill agents_assoc_my_facts
+/** @page datagen_db_impl
+ *
+ * * Create data structure that stores all agents that have a fact in their
+ * beliefs either directly or indirectly. Fill agents_assoc_my_facts.
+ */
 foreach ($my_facts as $id=>$info) {
     $sql = "select distinct a.agentID from agents a
             inner join agent_has_beliefs ab on ab.agentID = a.agentID
@@ -1202,8 +1218,8 @@ if ($debug) {
  * $store stores all variables like $agents, $num_agents, $my_beliefs, etc.
  * that need to be accessed by other dotgen files. The array $store is
  * serialized and then stored as a string in a local file
- * graphs2/$sessionID.vars. In header.php, the string is read from the file
- * and $store is obtained by unserializing the string. Thus the data
+ * "graphs2/".$sessionID.".vars". In header.php, the string is read from the
+ * file and $store is obtained by unserializing the string. Thus the data
  * structures within $store are available for use in dotgen files.
  */
 $store = array ();
